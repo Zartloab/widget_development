@@ -1,42 +1,152 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <link rel="shortcut icon" href="./favicon.png" />
-        <meta name="theme-color" content="#000000" />
-        <title>Simple Boilerplate</title>
-        <link rel="stylesheet" type="text/css" href="src/css/index.css">
-        <!-- Add additional CSS & JS files as necessary here -->
-    </head>
-    <body>
-        <!-- Add your site or application content here -->
-        <div id="root">
-            <img src="src/assets/simple-boilerplate-logo@3x.png" class="logo" alt="logo" />
-            <h1>Welcome to Simple Boilerplate!</h1>
-            <p>
-                This boilerplate is ready for HTML/CSS, Javascript, and JQuery projects. 
-                It includes a live server that lets you see HTML/JS/CSS changes with every save.
-            </p>
-            
-            <p id="subtext">
-                An Example JavaScript Hook.
-            </p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interactive Model</title>
+  <link rel="stylesheet" href="src/css/index.css" />
+</head>
+<body>
+  <!-- INTERACTIVE MODEL -->
+  <div class="imw" data-imw>
+    <h2 class="imw-title">INTERACTIVE MODEL</h2>
 
-            <h2>Instructions:</h2>
-            <p>
-                To see live changes, please go to the root folder ('simple-boilerplate/')
-                and run "npm start".
-            </p>
-            <p>
-                To start coding, start changing the files within src/css and src/js. 
-                Images can be stored in src/assets.
-            </p>
+    <div class="imw-layout" aria-describedby="imw-help">
+      <div class="imw-left">
+        <div class="left-group">
+          <button class="pill pill-blue" type="button" aria-describedby="tt-cs">
+            <span class="pill-main">Cultural<br>Safety</span>
+            <span class="pill-sub">Safe</span>
+          </button>
+          <div class="tooltip speech" id="tt-cs" role="tooltip">
+            The level of cultural safety, as defined by Indigenous people,
+            across all aspects of a commissioned evaluation from the design
+            through to final reporting.
+          </div>
         </div>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-        <!-- ================================ -->
-        <!-- Add more JavaScript files here!! -->
-        <!-- ================================ -->
-        <script type="text/javascript" src="src/js/other.js"></script>
-        <script type="text/javascript" src="src/js/index.js"></script>
-    </body>
+
+        <div class="left-group">
+          <button class="pill pill-orange" type="button" aria-describedby="tt-pw">
+            <span class="pill-main">Power<br>Balance/ Imbalance</span>
+            <span class="pill-sub">Indigenous People Power</span>
+          </button>
+          <div class="tooltip speech" id="tt-pw" role="tooltip">
+            The level of power, as defined by Indigenous people, that Indigenous
+            people have across all aspects of a commissioned evaluation
+            (design to final reporting).
+          </div>
+        </div>
+
+        <div class="left-group">
+          <button class="pill pill-green" type="button" aria-describedby="tt-rc">
+            <span class="pill-main">Reciprocity</span>
+            <span class="pill-sub">Two-Way Learning</span>
+          </button>
+          <div class="tooltip speech" id="tt-rc" role="tooltip">
+            How all stakeholders in a commissioned evaluation demonstrate mutuality
+            for participants, i.e. how the work could benefit Indigenous people,
+            as defined by Indigenous people.
+          </div>
+        </div>
+      </div>
+
+      <div class="imw-strip">
+        <div class="strip-grid">
+          <div class="strip-main">
+            <div class="rows" id="rows">
+              <div class="guide guide-top" id="guideTop" aria-hidden="true"></div>
+
+              <div class="mid" id="midRow">
+                <div class="col-headings top" aria-hidden="true">
+                  <div class="col-title top" data-stage-title="0">
+                    <span>Indigenous Led</span><span class="title-arrows">↔</span>
+                  </div>
+                  <div class="col-title top" data-stage-title="1">
+                    <span>Delegative</span><span class="title-arrows">↔</span>
+                  </div>
+                  <div class="col-title top" data-stage-title="2">
+                    <span>Co-Design</span><span class="title-arrows">↔</span>
+                  </div>
+                  <div></div><div></div>
+                </div>
+
+                <div class="dotline" role="group" aria-label="Select a theme at a stage">
+                  <button class="dot" data-theme="cultural"    data-stage="0" aria-label="Cultural Safety — Indigenous Led"></button>
+                  <button class="dot" data-theme="power"       data-stage="0" aria-label="Power — Indigenous Led"></button>
+                  <button class="dot" data-theme="reciprocity" data-stage="0" aria-label="Reciprocity — Indigenous Led"></button>
+
+                  <button class="dot" data-theme="cultural"    data-stage="1" aria-label="Cultural Safety — Delegative"></button>
+                  <button class="dot" data-theme="power"       data-stage="1" aria-label="Power — Delegative"></button>
+                  <button class="dot" data-theme="reciprocity" data-stage="1" aria-label="Reciprocity — Delegative"></button>
+
+                  <button class="dot" data-theme="cultural"    data-stage="2" aria-label="Cultural Safety — Co-Design"></button>
+                  <button class="dot" data-theme="power"       data-stage="2" aria-label="Power — Co-Design"></button>
+                  <button class="dot" data-theme="reciprocity" data-stage="2" aria-label="Reciprocity — Co-Design"></button>
+
+                  <button class="dot" data-theme="cultural"    data-stage="3" aria-label="Cultural Safety — Participatory"></button>
+                  <button class="dot" data-theme="power"       data-stage="3" aria-label="Power — Participatory"></button>
+                  <button class="dot" data-theme="reciprocity" data-stage="3" aria-label="Reciprocity — Participatory"></button>
+
+                  <button class="dot" data-theme="cultural"    data-stage="4" aria-label="Cultural Safety — Top Down"></button>
+                  <button class="dot" data-theme="power"       data-stage="4" aria-label="Power — Top Down"></button>
+                  <button class="dot" data-theme="reciprocity" data-stage="4" aria-label="Reciprocity — Top Down"></button>
+                </div>
+
+                <div class="orange-baseline" id="baseline" aria-hidden="true"></div>
+
+                <div class="col-headings bottom" aria-hidden="true">
+                  <div></div><div></div><div></div>
+                  <div class="col-title bottom" data-stage-title="3">
+                    <span>Participatory</span><span class="title-arrows">↔</span>
+                  </div>
+                  <div class="col-title bottom" data-stage-title="4">
+                    <span>Top Down</span><span class="title-arrows">↔</span>
+                  </div>
+                </div>
+
+                <div class="title-float" id="titleFloat" aria-hidden="true"></div>
+
+                <div class="popover" id="imw-popover" role="dialog"
+                  aria-live="polite" aria-labelledby="imw-popover-title" aria-describedby="imw-popover-text" hidden>
+                  <div class="popover-card">
+                    <h3 id="imw-popover-title"></h3>
+                    <p id="imw-popover-text"></p>
+                    <button class="close" type="button" data-close>Close</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="guide guide-bottom" id="guideBottom" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <div class="strip-rail" aria-hidden="true">
+            <div class="rail-group">
+              <div class="cap cap-blue">Unsafe</div>
+              <div class="note">Limited Commissioner Cultural Capability</div>
+            </div>
+            <div class="rail-group">
+              <div class="cap cap-orange">Commissioner Power</div>
+              <div class="note">Limited Participation</div>
+            </div>
+            <div class="rail-group">
+              <div class="cap cap-green">Extractive</div>
+              <div class="note">Benefit For Commissioner Only</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="sr-only" id="imw-help">
+      Tab to a dot and press Enter or Space to open details. Press Escape to close.
+      Columns highlight on hover and focus.
+    </p>
+    <div class="sr-only" id="imw-live" aria-live="polite" aria-atomic="true"></div>
+  </div>
+
+  <!-- keep jQuery if your boilerplate needs it; not required for this widget -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+  <script src="src/js/index.js" defer></script>
+</body>
 </html>
