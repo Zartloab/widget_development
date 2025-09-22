@@ -27,43 +27,59 @@
     ]
   };
   const STAGES = ["Indigenous Led","Delegative","Co-Design","Participatory","Top Down"];
+  const THEME_LABELS = {
+    cultural: 'Cultural Safety',
+    power: 'Power',
+    reciprocity: 'Reciprocity'
+  };
 
   const guideTop  = document.getElementById('guideTop');
   const guideBot  = document.getElementById('guideBottom');
   const baseline  = document.getElementById('baseline');
   const midRow    = document.getElementById('midRow');
-  const dotline   = midRow.querySelector('.dotline');
+  const dotline   = midRow ? midRow.querySelector('.dotline') : null;
+  if (!guideTop || !guideBot || !baseline || !midRow || !dotline) return;
 
-  const floatEl   = document.getElementById('titleFloat');
-  const popover   = document.getElementById('imw-popover');
-  const card      = popover.querySelector('.popover-card');
-  const titleEl   = document.getElementById('imw-popover-title');
-  const textEl    = document.getElementById('imw-popover-text');
-  const closeBtn  = popover.querySelector('[data-close]');
+  const stageGroups = Array.from(dotline.querySelectorAll('.stage-group'));
+  const dots        = Array.from(dotline.querySelectorAll('.dot'));
+
+  const floatEl    = document.getElementById('titleFloat');
+  const popover    = document.getElementById('imw-popover');
+  const card       = popover ? popover.querySelector('.popover-card') : null;
+  const titleEl    = document.getElementById('imw-popover-title');
+  const textEl     = document.getElementById('imw-popover-text');
+  const closeBtn   = popover ? popover.querySelector('[data-close]') : null;
+  const liveRegion = document.getElementById('imw-live');
+
+  if (!floatEl || !popover || !card || !titleEl || !textEl || !closeBtn) return;
+
+  const verticalQuery = window.matchMedia('(max-width: 900px)');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const titleMap = {};
   document.querySelectorAll('.col-title').forEach(n => { titleMap[Number(n.dataset.stageTitle)] = n; });
 
-  // column hover colorization (mouse)
-  dotline.addEventListener('mousemove', (e)=>{
-    const r = dotline.getBoundingClientRect();
-    const x = e.clientX - r.left;
-    const col = Math.min(4, Math.max(0, Math.floor((x / r.width) * 5)));
-    root.setAttribute('data-hover-col', String(col));
-  });
-  dotline.addEventListener('mouseleave', ()=> root.removeAttribute('data-hover-col'));
+  let activeDot = null;
+  let activeStageGroup = null;
+  let lastTrigger = null;
+  let disabledButtons = [];
+  let isModalOpen = false;
 
-  // keyboard parity
-  root.querySelectorAll('.dot').forEach(btn=>{
-    btn.addEventListener('focus', ()=> root.setAttribute('data-hover-col', btn.getAttribute('data-stage')));
-    btn.addEventListener('blur',  ()=> root.removeAttribute('data-hover-col'));
-  });
+  function setHoverStage(stage){
+    if (stage === null || stage === undefined || stage === ''){
+      if (!isModalOpen) root.removeAttribute('data-hover-col');
+      return;
+    }
+    const value = Number(stage);
+    if (Number.isNaN(value)) return;
+    root.setAttribute('data-hover-col', String(value));
+  }
 
   function centerXForStage(stage){
-    // middle (power) dot is the anchor
     const btn = dotline.querySelector(`.dot[data-stage="${stage}"][data-theme="power"]`);
-    const r   = btn.getBoundingClientRect();
-    const m   = midRow.getBoundingClientRect();
+    if (!btn) return 0;
+    const r = btn.getBoundingClientRect();
+    const m = midRow.getBoundingClientRect();
     return r.left - m.left + r.width/2;
   }
 
@@ -71,15 +87,12 @@
     const defaultTitle = titleMap[stage];
     if (!defaultTitle) return;
 
-    // hide the default title while floating
     defaultTitle.style.visibility = 'hidden';
 
-    // set content + theme-highlighting
     floatEl.innerHTML = `<span>${STAGES[stage]}</span><span class="title-arrows">↔</span>`;
     floatEl.dataset.theme = theme;
     floatEl.classList.add('active');
 
-    // measure and place
     floatEl.style.transform = 'translate(-9999px,-9999px)';
     floatEl.style.display   = 'block';
 
@@ -103,40 +116,94 @@
     delete floatEl.dataset.theme;
     floatEl.style.transform = 'translate(-9999px,-9999px)';
     floatEl.style.display   = 'block';
-    // restore all defaults
-    Object.values(titleMap).forEach(n => n.style.visibility = '');
+    Object.values(titleMap).forEach(n => { if (n) n.style.visibility = ''; });
   }
 
-  function openPopover(btn){
-    // NEW: restore any previously hidden default titles BEFORE opening a new popup
+  function markActiveDot(btn, theme){
+    if (activeDot && activeDot !== btn) activeDot.classList.remove('is-active');
+    activeDot = btn;
+    if (activeDot) activeDot.classList.add('is-active');
+  }
+
+  function markActiveStage(stage, theme){
+    if (activeStageGroup){
+      activeStageGroup.classList.remove('is-active');
+      delete activeStageGroup.dataset.activeTheme;
+    }
+    const next = stageGroups.find(group => Number(group.dataset.stageGroup) === stage);
+    activeStageGroup = next || null;
+    if (activeStageGroup){
+      activeStageGroup.classList.add('is-active');
+      activeStageGroup.dataset.activeTheme = theme;
+    }
+  }
+
+  function announce(theme, stage){
+    if (!liveRegion) return;
+    const label = THEME_LABELS[theme] || theme;
+    liveRegion.textContent = `${label} — ${STAGES[stage]}: ${COPY[theme][stage]}`;
+  }
+
+  function disableBackgroundFocus(){
+    disabledButtons = Array.from(root.querySelectorAll('button')).filter(btn => !popover.contains(btn));
+    disabledButtons.forEach(btn => {
+      btn.dataset.prevTabIndex = btn.hasAttribute('tabindex') ? btn.getAttribute('tabindex') : '';
+      btn.setAttribute('tabindex', '-1');
+    });
+    root.setAttribute('data-modal-open', 'true');
+  }
+
+  function restoreBackgroundFocus(){
+    disabledButtons.forEach(btn => {
+      const prev = btn.dataset.prevTabIndex;
+      if (prev === undefined) return;
+      if (prev && prev.length){
+        btn.setAttribute('tabindex', prev);
+      } else {
+        btn.removeAttribute('tabindex');
+      }
+      delete btn.dataset.prevTabIndex;
+    });
+    disabledButtons = [];
+    root.removeAttribute('data-modal-open');
+  }
+
+  function scrollCardIntoView(){
+    if (prefersReducedMotion.matches){
+      card.scrollIntoView({ block:'nearest' });
+    } else {
+      card.scrollIntoView({ block:'nearest', behavior:'smooth' });
+    }
+  }
+
+  function layoutPopover(trigger, stage, theme){
     clearFloatingTitle();
 
-    const stage = Number(btn.getAttribute('data-stage'));
-    const theme = btn.getAttribute('data-theme');
+    if (verticalQuery.matches){
+      popover.hidden = false;
+      card.style.left = 'auto';
+      card.style.top  = 'auto';
+      requestAnimationFrame(scrollCardIntoView);
+      return;
+    }
 
-    titleEl.textContent = STAGES[stage];
-    textEl.textContent  = COPY[theme][stage];
-    card.dataset.theme  = theme;
-
-    // measure anchors
-    const rDot  = btn.getBoundingClientRect();
+    const rDot  = trigger.getBoundingClientRect();
     const rMid  = midRow.getBoundingClientRect();
     const rTop  = guideTop.getBoundingClientRect();
     const rBot  = guideBot.getBoundingClientRect();
     const rBase = baseline.getBoundingClientRect();
 
-    // show to get card size
     popover.hidden = false;
     card.style.left = '0px';
     card.style.top  = '0px';
+
     const rCard0 = card.getBoundingClientRect();
 
-    // clamp X inside mid
-    const desiredLeft = rDot.left - rMid.left - 180;
+    const desiredLeft = rDot.left - rMid.left - (rCard0.width / 2) + (rDot.width / 2);
     const maxLeft     = rMid.width - rCard0.width - 24;
-    const left        = Math.max(24, Math.min(desiredLeft, maxLeft));
+    const minLeft     = 24;
+    const left        = Math.max(minLeft, Math.min(desiredLeft, maxLeft));
 
-    // lane constraints
     const laneUpMin  = rTop.bottom  - rMid.top + 12;
     const laneUpMax  = rBase.top    - rMid.top - rCard0.height - 12;
     const laneDnMin  = rBase.bottom - rMid.top + 12;
@@ -152,25 +219,116 @@
     card.style.left = left + 'px';
     card.style.top  = top  + 'px';
 
-    // compute placed rect and then position the floating highlighted title
     const rCard = card.getBoundingClientRect();
     placeFloatingTitle(stage, theme, rCard);
+  }
+
+  function openPopover(btn){
+    const stage = Number(btn.getAttribute('data-stage'));
+    const theme = btn.getAttribute('data-theme');
+    if (Number.isNaN(stage) || !theme) return;
+
+    lastTrigger = btn;
+    markActiveDot(btn, theme);
+    markActiveStage(stage, theme);
+    isModalOpen = true;
+    setHoverStage(stage);
+
+    const themeLabel = THEME_LABELS[theme] || theme;
+    titleEl.textContent = `${themeLabel} — ${STAGES[stage]}`;
+    textEl.textContent  = COPY[theme][stage];
+    card.dataset.theme  = theme;
+
+    announce(theme, stage);
+    disableBackgroundFocus();
+    layoutPopover(btn, stage, theme);
 
     closeBtn.focus();
     document.addEventListener('keydown', onEsc);
   }
 
   function closePopover(){
+    if (popover.hidden) return;
     popover.hidden = true;
+    isModalOpen = false;
+
+    if (liveRegion) liveRegion.textContent = '';
+
+    if (activeDot){
+      activeDot.classList.remove('is-active');
+      activeDot = null;
+    }
+    if (activeStageGroup){
+      activeStageGroup.classList.remove('is-active');
+      delete activeStageGroup.dataset.activeTheme;
+      activeStageGroup = null;
+    }
+
     clearFloatingTitle();
+    setHoverStage(null);
     document.removeEventListener('keydown', onEsc);
+    restoreBackgroundFocus();
+
+    const returnFocus = lastTrigger;
+    lastTrigger = null;
+    if (returnFocus){
+      requestAnimationFrame(() => returnFocus.focus());
+    }
   }
-  function onEsc(e){ if(e.key === 'Escape') closePopover(); }
+
+  function onEsc(e){
+    if (e.key === 'Escape'){
+      e.preventDefault();
+      closePopover();
+    }
+  }
+
   closeBtn.addEventListener('click', closePopover);
 
-  // click handlers
-  root.querySelectorAll('.dot').forEach(btn=>{
+  dots.forEach(btn => {
     btn.type = 'button';
-    btn.addEventListener('click', ()=> openPopover(btn));
+    const stage = btn.getAttribute('data-stage');
+    btn.addEventListener('mouseenter', () => {
+      if (!isModalOpen) setHoverStage(stage);
+    });
+    btn.addEventListener('mouseleave', () => {
+      if (!isModalOpen) setHoverStage(null);
+    });
+    btn.addEventListener('focus', () => setHoverStage(stage));
+    btn.addEventListener('blur', () => {
+      if (!isModalOpen || btn !== activeDot){
+        setHoverStage(null);
+      }
+    });
+    btn.addEventListener('click', () => openPopover(btn));
   });
+
+  stageGroups.forEach(group => {
+    const stage = group.dataset.stageGroup;
+    group.addEventListener('mouseenter', () => {
+      if (!isModalOpen) setHoverStage(stage);
+    });
+    group.addEventListener('mouseleave', () => {
+      if (!isModalOpen) setHoverStage(null);
+    });
+  });
+
+  dotline.addEventListener('mouseleave', () => {
+    if (!isModalOpen) setHoverStage(null);
+  });
+
+  const onLayoutChange = () => {
+    if (!popover.hidden && activeDot){
+      const stage = Number(activeDot.getAttribute('data-stage'));
+      const theme = activeDot.getAttribute('data-theme');
+      layoutPopover(activeDot, stage, theme);
+    }
+  };
+
+  if (typeof verticalQuery.addEventListener === 'function'){
+    verticalQuery.addEventListener('change', onLayoutChange);
+  } else if (typeof verticalQuery.addListener === 'function'){
+    verticalQuery.addListener(onLayoutChange);
+  }
+  window.addEventListener('resize', onLayoutChange);
 })();
