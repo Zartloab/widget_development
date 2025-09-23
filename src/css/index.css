@@ -109,7 +109,10 @@ body{
 .pill:focus + .tooltip{ display:block; }
 
 /* STRIP */
-.imw-strip{ background:rgba(255,255,255,.92); border:1px solid var(--line); border-radius:36px; padding:28px; }
+.imw-strip{
+  padding-block:28px;
+  padding-inline:0;
+}
 .strip-grid{ display:grid; grid-template-columns:1fr 240px; gap:40px; align-items:start; }
 
 /* RIGHT rail */
@@ -162,10 +165,10 @@ body{
   align-items:start;
 }
 .stage-group{
-  display:grid;
-  grid-auto-rows:min-content;
-  justify-items:center;
-  row-gap:14px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:14px;
   padding:0 4px;
 }
 .stage-label{
@@ -282,6 +285,7 @@ body{
   .title-float{ display:none!important; }
   .dotline{ grid-template-columns:1fr; row-gap:22px; }
   .stage-group{
+    display:grid;
     grid-template-columns:repeat(3,minmax(0,72px));
     grid-template-rows:auto auto;
     row-gap:18px;
@@ -307,7 +311,6 @@ body{
     letter-spacing:.02em;
   }
   .stage-label .title-arrows{ opacity:.4; }
-  .imw-strip{ padding:24px; border-radius:30px; }
   .cap{ font-size:.95rem; }
   .note{ font-size:.95rem; }
   .popover{ position:static; pointer-events:auto; }
