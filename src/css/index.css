@@ -87,7 +87,27 @@ body{
   padding-left:8px;
 }
 
-.left-group{ position:relative; }
+.left-group{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  align-items:flex-start;
+}
+
+.pill-card{
+  background:rgba(255,255,255,.98);
+  border-radius:44px;
+  border:1px solid rgba(12,23,38,.08);
+  box-shadow:0 18px 40px rgba(15,31,52,.14);
+  padding:18px 20px;
+  display:flex;
+  width:100%;
+  transition:box-shadow .2s ease, transform .2s ease;
+}
+
+.pill-card:hover{ box-shadow:0 20px 42px rgba(15,31,52,.16); }
+.pill-card:focus-within{ box-shadow:0 22px 46px rgba(15,31,52,.18); transform:translateY(-2px); }
 
 
 .pill{
@@ -145,9 +165,9 @@ body{
 /* Left tooltips */
 .tooltip.speech{
   position:absolute;
-  left:calc(100% + 32px);
-  top:0;
-  transform:translateY(-12%);
+  left:calc(100% + 38px);
+  top:50%;
+  transform:translateY(-50%);
   width:320px;
   background:#ffffff;
   color:#0f1113;
@@ -163,8 +183,8 @@ body{
 .tooltip.speech::after{
   content:"";
   position:absolute;
-  bottom:-16px;
   left:72px;
+  bottom:-16px;
   border-top:16px solid #ffffff;
   border-left:14px solid transparent;
   border-right:14px solid transparent;
@@ -175,7 +195,9 @@ body{
 .pill:focus + .tooltip{ display:block; }
 
 @media (max-width:1200px){
-  .tooltip.speech{ position:relative; left:auto; transform:none; margin-top:.75rem; width:auto; }
+  .left-group{ gap:14px; }
+  .pill-card{ padding:16px 18px; }
+  .tooltip.speech{ position:relative; left:auto; transform:none; margin-top:.5rem; width:auto; }
   .tooltip.speech::after{ display:none; }
 }
 
@@ -429,6 +451,7 @@ body{
   .imw{ --row-gap:112px; }
   .imw-title{ font-size:1.95rem; }
   .imw-panel{ padding:40px 24px 46px; }
+  .pill-card{ padding:14px 16px; border-radius:36px; }
   .mid{ row-gap:12px; column-gap:32px; }
   .stage-headings{ column-gap:32px; }
   .dotline{ column-gap:32px; }
@@ -441,6 +464,7 @@ body{
   .imw{ --row-gap:96px; }
   .imw-bg{ padding:32px 12px; }
   .imw-layout{ grid-template-columns:1fr; }
+  .pill-card{ padding:12px 14px; border-radius:30px; }
   .pill{ flex-direction:column; gap:12px; }
   .pill .pill-main,
   .pill .pill-sub{ width:100%; min-height:auto; justify-content:flex-start; text-align:left; }
