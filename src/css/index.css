@@ -37,7 +37,7 @@ body{
 .imw-bg{
   min-height:100vh;
   padding:24px;
-  background:#f2f4f7 url('assets/pattern.jpg') center/cover no-repeat fixed;
+  background:#f2f4f7 url('assets/pattern.png') center/cover no-repeat fixed;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -234,7 +234,7 @@ body{
   display:grid;
   grid-template-columns:repeat(5, minmax(0,1fr));
   column-gap:48px;
-  row-gap:18px;
+  row-gap:24px;
 }
 
 .col-headings{
@@ -253,11 +253,16 @@ body{
 .col-headings.bottom{ margin-top:16px; }
 
 .col-title{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.25rem;
   white-space:nowrap;
 }
 
 .col-headings.top .col-title.top.left{
   justify-self:start;
+  align-items:flex-start;
   text-align:left;
 }
 
@@ -267,6 +272,7 @@ body{
 
 .col-headings.top .col-title.top.right{
   justify-self:end;
+  align-items:flex-end;
   text-align:right;
 }
 
@@ -275,15 +281,11 @@ body{
   text-align:center;
 }
 
-.col-headings.bottom .col-title.bottom:last-of-type{
-  justify-self:end;
-  text-align:right;
-}
-
 .col-title .label{
   display:block;
   font-size:1.05rem;
   font-weight:800;
+  line-height:1.1;
 }
 
 .col-title .label.grey{ color:#8d96a0; }
@@ -291,7 +293,6 @@ body{
 
 .title-arrows{
   display:block;
-  margin-top:.25rem;
   line-height:1;
   font-size:1rem;
   letter-spacing:.08em;
@@ -340,17 +341,26 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:16px;
+  gap:18px;
+  flex-wrap:nowrap;
+  min-width:132px;
 }
 
 .dot{
-  width:28px;
-  height:28px;
+  --dot-size:28px;
+  width:var(--dot-size);
+  height:var(--dot-size);
   border-radius:50%;
   border:2px solid rgba(0,0,0,.18);
   background:#cfd6dc;
   position:relative;
   cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  flex:0 0 var(--dot-size);
+  aspect-ratio:1 / 1;
 }
 
 .dot:focus{ outline:3px solid #000; outline-offset:3px; }
@@ -459,8 +469,8 @@ body{
   .mid{ row-gap:14px; column-gap:32px; }
   .col-headings{ column-gap:32px; }
   .dotline{ column-gap:32px; }
-  .stage-column{ gap:12px; }
-  .dot{ width:24px; height:24px; }
+  .stage-column{ gap:12px; min-width:auto; }
+  .dot{ --dot-size:24px; }
   .pill .pill-main{ min-height:80px; font-size:1.1rem; }
   .pill .pill-sub{ min-width:110px; font-size:.98rem; padding:0 18px; }
 }
