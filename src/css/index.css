@@ -30,7 +30,7 @@ body{
   --line:#e6ebf0;
   --focus:#000000;
   --muted:#c8d0d9;
-  --row-gap:118px;
+  --row-gap:72px;              /* tighter vertical rhythm */
   --pill-main-width:272px;
   --pill-sub-width:176px;
   --pill-gap:18px;
@@ -72,8 +72,8 @@ body{
   text-align:center;
   font-weight:900;
   letter-spacing:.02em;
-  margin:1rem 0 1.75rem;
-  font-size:2.2rem;
+  margin:1rem 0 1.5rem;
+  font-size:2.4rem;
 }
 
 /* PAGE GRID */
@@ -217,8 +217,8 @@ body{
 .strip-grid{
   display:grid;
   grid-template-columns:minmax(0,1fr) 220px;
-  gap:48px;
-  align-items:start;
+  gap:40px;
+  align-items:stretch;
 }
 
 .strip-main{ position:relative; padding:0; }
@@ -247,17 +247,16 @@ body{
 /* MIDDLE ROW */
 .mid{
   position:relative;
-  display:grid;
+  display:grid;                /* one column wrapper */
   grid-template-columns:1fr;
-  row-gap:24px;
+  row-gap:16px;                /* smaller stack gap */
 }
 
 .col-headings{
   grid-column:1 / -1;
-  position:relative;
   display:grid;
-  grid-template-columns:repeat(15, 1fr);
-  gap:14px;
+  grid-template-columns:repeat(15, 1fr);  /* 15-track ruler */
+  gap:14px;                                /* same gap as .dotline */
   color:#8d96a0;
   font-weight:800;
   text-align:center;
@@ -266,8 +265,8 @@ body{
 
 .col-headings > :empty{ display:none; }
 
-.col-headings.top{ margin-bottom:24px; }
-.col-headings.bottom{ margin-top:16px; }
+.col-headings.top{ margin-bottom:6px; }
+.col-headings.bottom{ margin-top:6px; }
 
 .col-title{
   display:flex;
@@ -337,9 +336,8 @@ body{
 .dotline{
   grid-column:1 / -1;
   display:grid;
-  grid-auto-flow:column;
-  grid-template-columns:repeat(15, minmax(26px, 1fr));
-  gap:14px;
+  grid-template-columns:repeat(15, minmax(28px, 1fr)); /* fixed visual size per track */
+  gap:14px;                      /* must match headings gap */
   align-items:center;
   justify-items:center;
   margin:0;
@@ -385,9 +383,10 @@ body{
   grid-column:1 / -1;
   height:10px;
   border-radius:6px;
-  margin:12px 0 6px;
+  margin:10px 0 0;               /* sit closer to dots */
   background:repeating-linear-gradient(90deg, var(--orange), var(--orange) 2px, transparent 2px, transparent 12px);
   opacity:.96;
+  align-self:center;              /* vertical align with dots */
 }
 
 /* Popup */
@@ -415,9 +414,15 @@ body{
 .close:focus{ outline:3px solid #000; outline-offset:3px; }
 
 /* RIGHT rail */
-.strip-rail{ display:grid; row-gap:var(--row-gap); justify-items:end; }
+.strip-rail{
+  display:grid;
+  grid-auto-rows:auto;
+  row-gap:var(--row-gap);
+  justify-items:end;
+  align-items:center;             /* vertically center each cap/sublabel pair */
+}
 
-.rail-group{ display:grid; row-gap:8px; text-align:right; }
+.rail-group{ display:grid; row-gap:6px; text-align:right; align-items:center; }
 
 .cap{
   color:#fff;
