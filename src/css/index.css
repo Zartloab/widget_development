@@ -97,69 +97,64 @@ body{
   align-items:flex-start;
 }
 
-.pill-card{
-  background:transparent;
-  border-radius:44px;
-  padding:0;
-  display:flex;
-  width:100%;
+.pill-row{
+  display:inline-flex;
+  align-items:stretch;
+  gap:0;
+  filter:drop-shadow(0 16px 26px rgba(13,36,56,.16));
+  border-radius:999px;
 }
-
 
 .pill{
   --main:var(--blue);
   --accent:var(--blue-dark);
-  display:flex;
-  gap:12px;
-  align-items:stretch;
-  background:transparent;
   border:none;
-  padding:0;
-  margin:0;
+  background:var(--main);
+  color:#fff;
+  font-weight:900;
+  font-size:1.22rem;
+  line-height:1.2;
+  text-align:left;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  padding:0 36px;
+  min-height:94px;
+  border-radius:999px 0 0 999px;
   cursor:default;
-  width:100%;
-  filter:drop-shadow(0 16px 26px rgba(13,36,56,.16));
+  white-space:normal;
 }
 
 .pill:focus{
   outline:3px solid var(--focus);
   outline-offset:6px;
-  border-radius:999px;
 }
 
-.pill span{
+.pill br{ display:block; }
+
+.pill-cap{
+  --accent:var(--blue-dark);
   display:flex;
   align-items:center;
   justify-content:center;
+  background:var(--accent);
   color:#fff;
   font-weight:800;
-}
-
-.pill .pill-main{
-  flex:1;
-  min-height:92px;
-  background:var(--main);
-  border-radius:999px;
-  padding:0 32px;
-  font-size:1.22rem;
-  font-weight:900;
-  text-align:left;
-  line-height:1.2;
-  justify-content:flex-start;
-}
-
-.pill .pill-sub{
-  min-width:136px;
-  background:var(--accent);
-  border-radius:999px;
-  padding:0 28px;
   font-size:1.02rem;
-  font-weight:800;
+  min-height:94px;
+  padding:0 28px;
+  border-radius:0 28px 28px 0;
+  letter-spacing:.01em;
+  white-space:nowrap;
 }
 
-.pill-blue{ --main:var(--blue); --accent:var(--blue-dark); }
-.pill-orange{ --main:var(--orange); --accent:var(--orange-dark); }
-.pill-green{ --main:var(--green); --accent:var(--green-dark); }
+.pill-blue{ --main:var(--blue); }
+.pill-orange{ --main:var(--orange); }
+.pill-green{ --main:var(--green); }
+
+.pill-cap-blue{ --accent:var(--blue-dark); }
+.pill-cap-orange{ --accent:var(--orange-dark); }
+.pill-cap-green{ --accent:var(--green-dark); }
 
 /* Left tooltips */
 .tooltip.speech{
@@ -191,8 +186,9 @@ body{
   border-top:14px solid #e9edf1;
 }
 
-.pill-card:hover + .tooltip,
-.pill-card:focus-within + .tooltip{ display:block; }
+.pill:hover ~ .tooltip,
+.pill:focus ~ .tooltip,
+.pill:focus-visible ~ .tooltip{ display:block; }
 
 @media (max-width:1200px){
   .left-group{ gap:12px; }
