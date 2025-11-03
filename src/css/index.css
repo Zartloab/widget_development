@@ -30,7 +30,9 @@ body{
   --line:#e6ebf0;
   --focus:#000000;
   --muted:#c8d0d9;
-  --row-gap:72px;              /* tighter vertical rhythm */
+  --row-gap:72px;      /* vertical rhythm between the 3 rows */
+  --rail-width:240px;  /* width of right rail column */
+  --gutter:72px;       /* horizontal gap between main and rail */
   --pill-main-width:272px;
   --pill-sub-width:176px;
   --pill-gap:18px;
@@ -216,12 +218,15 @@ body{
 
 .strip-grid{
   display:grid;
-  grid-template-columns:minmax(0,1fr) 220px;
-  gap:40px;
-  align-items:stretch;
+  grid-template-columns:minmax(0, calc(100% - var(--rail-width) - var(--gutter))) var(--rail-width);
+  column-gap:var(--gutter);
+  align-items:start;
 }
 
-.strip-main{ position:relative; padding:0; }
+.strip-main{
+  position:relative;
+  padding-right:24px;
+}
 
 .rows{
   display:grid;
@@ -269,14 +274,13 @@ body{
 .col-headings.bottom{ margin-top:6px; }
 
 .col-title{
-  display:flex;
-  flex-direction:column;
+  display:inline-grid;          /* inline so the ↔ stays on same line */
+  grid-auto-flow:column;
   align-items:center;
   justify-self:center;
-  text-align:center;
-  gap:.25rem;
+  gap:8px;
   white-space:nowrap;
-  grid-column:span 3;
+  text-align:center;
 }
 
 .col-title .label{
@@ -290,11 +294,11 @@ body{
 .col-title .label.strong{ color:#111; font-weight:900; }
 
 .title-arrows{
-  display:block;
+  display:inline;
+  margin:0;
   line-height:1;
   font-size:.9rem;
   letter-spacing:.08em;
-  margin-top:.25rem;
 }
 
 .title-arrows.grey{ color:#8d96a0; opacity:.6; }
@@ -336,8 +340,8 @@ body{
 .dotline{
   grid-column:1 / -1;
   display:grid;
-  grid-template-columns:repeat(15, minmax(28px, 1fr)); /* fixed visual size per track */
-  gap:14px;                      /* must match headings gap */
+  grid-template-columns:repeat(15, minmax(28px, 1fr)); /* one track per dot */
+  gap:14px;
   align-items:center;
   justify-items:center;
   margin:0;
@@ -382,11 +386,11 @@ body{
 .orange-baseline{
   grid-column:1 / -1;
   height:10px;
+  margin:2px 0 0;  /* tiny optical tweak */
   border-radius:6px;
-  margin:10px 0 0;               /* sit closer to dots */
   background:repeating-linear-gradient(90deg, var(--orange), var(--orange) 2px, transparent 2px, transparent 12px);
   opacity:.96;
-  align-self:center;              /* vertical align with dots */
+  align-self:center;
 }
 
 /* Popup */
@@ -416,13 +420,18 @@ body{
 /* RIGHT rail */
 .strip-rail{
   display:grid;
-  grid-auto-rows:auto;
+  grid-template-rows:repeat(3, 1fr);  /* one row per content row */
   row-gap:var(--row-gap);
   justify-items:end;
-  align-items:center;             /* vertically center each cap/sublabel pair */
+  align-items:center;
 }
 
-.rail-group{ display:grid; row-gap:6px; text-align:right; align-items:center; }
+.rail-group{
+  display:grid;
+  row-gap:10px;    /* breathing room between cap and note */
+  text-align:right;
+  align-items:center;
+}
 
 .cap{
   color:#fff;
@@ -430,13 +439,14 @@ body{
   border-radius:16px;
   padding:.55rem .9rem;
   font-size:1.02rem;
+  max-width:100%;
 }
 
 .cap-blue{ background:var(--blue); }
 .cap-orange{ background:var(--orange); }
 .cap-green{ background:var(--green); }
 
-.note{ color:#8d96a0; font-size:.95rem; max-width:220px; line-height:1.35; }
+.note{ color:#8d96a0; font-size:.95rem; max-width:220px; line-height:1.35; margin-top:2px; }
 
 /* Column hover colouring */
 [data-hover-col] .dot{ filter:grayscale(45%); }
