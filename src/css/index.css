@@ -236,7 +236,7 @@ body{
 
 .strip-main{
   position:relative;
-  padding:0;                 /* width calc already reserves gutter */
+  padding-right:24px;        /* small breathing room before the rail */
 }
 
 .rows{
