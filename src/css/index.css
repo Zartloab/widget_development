@@ -31,13 +31,9 @@ body{
   --line:#e6ebf0;
   --focus:#000000;
   --muted:#c8d0d9;
-
-  /* layout constants (single source of truth) */
-  --row-gap:72px;            /* vertical rhythm between the 3 rows */
-  --rail-width:240px;        /* right rail column width */
-  --gutter:72px;             /* fixed horizontal gutter between main + rail */
-
-  /* pill sizing */
+  --row-gap:72px;      /* vertical rhythm between the 3 rows */
+  --rail-width:240px;  /* width of right rail column */
+  --gutter:72px;       /* horizontal gap between main and rail */
   --pill-main-width:272px;
   --pill-sub-width:176px;
   --pill-gap:18px;
@@ -228,7 +224,6 @@ body{
 
 .strip-grid{
   display:grid;
-  /* main column EXCLUDES rail + gutter (prevents overlap), rail is fixed */
   grid-template-columns:minmax(0, calc(100% - var(--rail-width) - var(--gutter))) var(--rail-width);
   column-gap:var(--gutter);
   align-items:start;
@@ -236,7 +231,7 @@ body{
 
 .strip-main{
   position:relative;
-  padding-right:24px;        /* small breathing room before the rail */
+  padding-right:24px;
 }
 
 .rows{
@@ -285,14 +280,13 @@ body{
 .col-headings.bottom{ margin-top:6px; }
 
 .col-title{
-  display:inline-grid;            /* inline so ↔ can sit beside the label */
+  display:inline-grid;          /* inline so the ↔ stays on same line */
   grid-auto-flow:column;
   align-items:center;
   justify-self:center;
-  text-align:center;
   gap:8px;
   white-space:nowrap;
-  grid-column:span 3;
+  text-align:center;
 }
 
 .col-title .label{
@@ -306,11 +300,11 @@ body{
 .col-title .label.strong{ color:#111; font-weight:900; }
 
 .title-arrows{
-  display:inline;                 /* inline with the label */
+  display:inline;
+  margin:0;
   line-height:1;
   font-size:.9rem;
   letter-spacing:.08em;
-  margin:0;
 }
 
 .title-arrows.grey{ color:#8d96a0; opacity:.6; }
@@ -352,8 +346,8 @@ body{
 .dotline{
   grid-column:1 / -1;
   display:grid;
-  grid-template-columns:repeat(15, minmax(28px, 1fr)); /* fixed visual size per track */
-  gap:14px;                      /* must match headings gap */
+  grid-template-columns:repeat(15, minmax(28px, 1fr)); /* one track per dot */
+  gap:14px;
   align-items:center;
   justify-items:center;
   margin:0;
@@ -398,11 +392,11 @@ body{
 .orange-baseline{
   grid-column:1 / -1;
   height:10px;
+  margin:2px 0 0;  /* tiny optical tweak */
   border-radius:6px;
-  margin:2px 0 0;                 /* align through dot centerline (optical) */
   background:repeating-linear-gradient(90deg, var(--orange), var(--orange) 2px, transparent 2px, transparent 12px);
   opacity:.96;
-  align-self:center;              /* vertical align with dots */
+  align-self:center;
 }
 
 /* Popup */
@@ -432,20 +426,18 @@ body{
 /* RIGHT rail — one row per content row; each group centered to its row */
 .strip-rail{
   display:grid;
-  grid-template-rows:repeat(3, 1fr);
+  grid-template-rows:repeat(3, 1fr);  /* one row per content row */
   row-gap:var(--row-gap);
-  justify-items:end;     /* stick to right edge */
-  align-items:center;    /* center groups vertically in their row */
+  justify-items:end;
+  align-items:center;
 }
 
 .rail-group{
   display:grid;
-  row-gap:10px;          /* more space between cap and note */
+  row-gap:10px;    /* breathing room between cap and note */
   text-align:right;
   align-items:center;
 }
-.cap{ max-width:100%; }  /* never overflow into gutter */
-.note{ margin-top:2px; } /* keep text clear of the baseline */
 
 .cap{
   color:#fff;
@@ -453,13 +445,14 @@ body{
   border-radius:16px;
   padding:.55rem .9rem;
   font-size:1.02rem;
+  max-width:100%;
 }
 
 .cap-blue{ background:var(--blue); }
 .cap-orange{ background:var(--orange); }
 .cap-green{ background:var(--green); }
 
-.note{ color:#8d96a0; font-size:.95rem; max-width:220px; line-height:1.35; }
+.note{ color:#8d96a0; font-size:.95rem; max-width:220px; line-height:1.35; margin-top:2px; }
 
 /* Column hover colouring */
 [data-hover-col] .dot{ filter:grayscale(45%); }
