@@ -19,6 +19,7 @@ body{
 }
 
 .imw{
+  /* theme */
   --blue:#123b5a;
   --blue-dark:#0d324a;
   --orange:#c75a2d;
@@ -36,6 +37,7 @@ body{
   --pill-main-width:272px;
   --pill-sub-width:176px;
   --pill-gap:18px;
+
   color:var(--ink);
 }
 
@@ -135,7 +137,8 @@ body{
   cursor:default;
   white-space:normal;
   inline-size:var(--pill-main-width);
-  flex:0 0 auto;
+  max-width:var(--pill-main-width);
+  flex:0 0 var(--pill-main-width);
   box-shadow:0 16px 26px rgba(13,36,56,.16);
 }
 
@@ -159,9 +162,12 @@ body{
   padding:0 28px;
   border-radius:24px;
   letter-spacing:.01em;
-  white-space:nowrap;
   inline-size:var(--pill-sub-width);
-  flex:0 0 auto;
+  max-width:var(--pill-sub-width);
+  flex:0 0 var(--pill-sub-width);
+  white-space:normal;
+  overflow-wrap:anywhere;
+  text-align:center;
   box-shadow:0 10px 24px rgba(13,36,56,.12);
 }
 
@@ -417,7 +423,7 @@ body{
 .close{ margin-top:.75rem; background:#111; color:#fff; padding:.45rem .8rem; border-radius:10px; border:none; }
 .close:focus{ outline:3px solid #000; outline-offset:3px; }
 
-/* RIGHT rail */
+/* RIGHT rail — one row per content row; each group centered to its row */
 .strip-rail{
   display:grid;
   grid-template-rows:repeat(3, 1fr);  /* one row per content row */
@@ -509,7 +515,14 @@ body{
   .imw-layout{ grid-template-columns:1fr; }
   .pill-row{ flex-direction:column; align-items:stretch; gap:12px; }
   .pill,
-  .pill-cap{ inline-size:100%; min-height:auto; padding:16px 24px; box-shadow:0 12px 26px rgba(13,36,56,.14); }
+  .pill-cap{
+    inline-size:100%;
+    max-width:100%;
+    flex:1 1 auto;
+    min-height:auto;
+    padding:16px 24px;
+    box-shadow:0 12px 26px rgba(13,36,56,.14);
+  }
   .pill{ font-size:1.08rem; }
   .pill-cap{ font-size:.98rem; justify-content:flex-start; }
   .tooltip.speech{ margin-top:.5rem; }
