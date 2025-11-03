@@ -19,6 +19,7 @@ body{
 }
 
 .imw{
+  /* theme */
   --blue:#123b5a;
   --blue-dark:#0d324a;
   --orange:#c75a2d;
@@ -30,10 +31,17 @@ body{
   --line:#e6ebf0;
   --focus:#000000;
   --muted:#c8d0d9;
-  --row-gap:72px;              /* tighter vertical rhythm */
+
+  /* layout constants (single source of truth) */
+  --row-gap:72px;            /* vertical rhythm between the 3 rows */
+  --rail-width:240px;        /* right rail column width */
+  --gutter:72px;             /* fixed horizontal gutter between main + rail */
+
+  /* pill sizing */
   --pill-main-width:272px;
   --pill-sub-width:176px;
   --pill-gap:18px;
+
   color:var(--ink);
 }
 
@@ -220,15 +228,15 @@ body{
 
 .strip-grid{
   display:grid;
-  grid-template-columns:minmax(0,1fr) 240px; /* a touch wider rail */
-  column-gap:72px;                           /* bigger gutter so caps never sit over dots */
-  row-gap:var(--row-gap);
-  align-items:stretch;
+  /* main column EXCLUDES rail + gutter (prevents overlap), rail is fixed */
+  grid-template-columns:minmax(0, calc(100% - var(--rail-width) - var(--gutter))) var(--rail-width);
+  column-gap:var(--gutter);
+  align-items:start;
 }
 
 .strip-main{
   position:relative;
-  padding:0 28px 0 0;  /* small internal right gutter so dots/baselines never kiss the rail */
+  padding:0;                 /* width calc already reserves gutter */
 }
 
 .rows{
