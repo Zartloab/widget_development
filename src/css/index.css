@@ -220,12 +220,16 @@ body{
 
 .strip-grid{
   display:grid;
-  grid-template-columns:minmax(0,1fr) 220px;
-  gap:40px;
+  grid-template-columns:minmax(0,1fr) 240px; /* a touch wider rail */
+  column-gap:72px;                           /* bigger gutter so caps never sit over dots */
+  row-gap:var(--row-gap);
   align-items:stretch;
 }
 
-.strip-main{ position:relative; padding:0; }
+.strip-main{
+  position:relative;
+  padding:0 28px 0 0;  /* small internal right gutter so dots/baselines never kiss the rail */
+}
 
 .rows{
   display:grid;
@@ -273,12 +277,12 @@ body{
 .col-headings.bottom{ margin-top:6px; }
 
 .col-title{
-  display:flex;
-  flex-direction:column;
+  display:inline-grid;            /* inline so ↔ can sit beside the label */
+  grid-auto-flow:column;
   align-items:center;
   justify-self:center;
   text-align:center;
-  gap:.25rem;
+  gap:8px;
   white-space:nowrap;
   grid-column:span 3;
 }
@@ -294,11 +298,11 @@ body{
 .col-title .label.strong{ color:#111; font-weight:900; }
 
 .title-arrows{
-  display:block;
+  display:inline;                 /* inline with the label */
   line-height:1;
   font-size:.9rem;
   letter-spacing:.08em;
-  margin-top:.25rem;
+  margin:0;
 }
 
 .title-arrows.grey{ color:#8d96a0; opacity:.6; }
@@ -387,7 +391,7 @@ body{
   grid-column:1 / -1;
   height:10px;
   border-radius:6px;
-  margin:10px 0 0;               /* sit closer to dots */
+  margin:2px 0 0;                 /* align through dot centerline (optical) */
   background:repeating-linear-gradient(90deg, var(--orange), var(--orange) 2px, transparent 2px, transparent 12px);
   opacity:.96;
   align-self:center;              /* vertical align with dots */
@@ -417,23 +421,23 @@ body{
 .close{ margin-top:.75rem; background:#111; color:#fff; padding:.45rem .8rem; border-radius:10px; border:none; }
 .close:focus{ outline:3px solid #000; outline-offset:3px; }
 
-/* RIGHT rail */
+/* RIGHT rail — one row per content row; each group centered to its row */
 .strip-rail{
   display:grid;
-  grid-template-rows:auto auto auto;
+  grid-template-rows:repeat(3, 1fr);
   row-gap:var(--row-gap);
-  justify-items:end;
-  align-content:start;
-  height:100%;
+  justify-items:end;     /* stick to right edge */
+  align-items:center;    /* center groups vertically in their row */
 }
 
 .rail-group{
   display:grid;
-  row-gap:6px;
+  row-gap:10px;          /* more space between cap and note */
   text-align:right;
   align-items:center;
-  align-self:center;
 }
+.cap{ max-width:100%; }  /* never overflow into gutter */
+.note{ margin-top:2px; } /* keep text clear of the baseline */
 
 .cap{
   color:#fff;
