@@ -37,7 +37,12 @@ body{
 .imw-bg{
   min-height:100vh;
   padding:24px;
-  background:#f2f4f7 url('../../assets/Widget_BG.png') center/cover no-repeat fixed;
+  background-color:#f2f4f7;
+  background-image:var(--imw-bg, url('../../assets/Widget_BG.png'));
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
   display:flex;
   align-items:center;
   justify-content:center;
