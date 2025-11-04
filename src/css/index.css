@@ -552,9 +552,9 @@ body{
 
 .rail-group{
   display:grid;
-  row-gap:10px;
+  row-gap:12px;
   text-align:right;
-  align-items:center;
+  align-items:start;
 }
 .cap{ max-width:100%; }  /* never overflow into gutter */
 .note{ margin-top:2px; } /* keep text clear of the baseline */
