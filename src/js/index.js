@@ -42,6 +42,7 @@
   const closeBtn  = popover.querySelector('[data-close]');
 
   const titleMap = {};
+  let lastTrigger = null;
   document.querySelectorAll('.col-title').forEach(n => { titleMap[Number(n.dataset.stageTitle)] = n; });
 
   // column hover colorization (mouse)
@@ -111,6 +112,8 @@
     // NEW: restore any previously hidden default titles BEFORE opening a new popup
     clearFloatingTitle();
 
+    lastTrigger = btn;
+
     const stage = Number(btn.getAttribute('data-stage'));
     const theme = btn.getAttribute('data-theme');
 
@@ -164,6 +167,10 @@
     popover.hidden = true;
     clearFloatingTitle();
     document.removeEventListener('keydown', onEsc);
+    if(lastTrigger){
+      lastTrigger.focus();
+      lastTrigger = null;
+    }
   }
   function onEsc(e){ if(e.key === 'Escape') closePopover(); }
   closeBtn.addEventListener('click', closePopover);
