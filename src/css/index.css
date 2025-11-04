@@ -250,6 +250,7 @@ body{
   grid-template-rows:repeat(3, auto);
   column-gap:var(--gutter);
   align-items:start;
+  align-content:start;
 }
 
 .strip-main{
@@ -259,6 +260,7 @@ body{
   row-gap:var(--row-gap);
   min-width:0;                            /* allow the track to respect grid constraints */
   grid-row:1 / span 3;
+  align-content:start;
 }
 
 .rows{ display:contents; }
@@ -286,6 +288,7 @@ body{
   row-gap:16px;                /* smaller stack gap */
   justify-items:center;
   width:100%;
+  padding-bottom:calc(var(--dot-size) * 0.6);
   --track-width:calc((var(--dot-size) * 15) + (var(--dot-gap) * 14));
 }
 
@@ -379,11 +382,13 @@ body{
   display:grid;
   grid-template-columns:repeat(15, minmax(0, 1fr)); /* responsive track sizing */
   gap:var(--dot-gap);            /* must match headings gap */
-  align-items:center;
+  align-items:end;
   justify-items:center;
   margin:0;
   width:100%;
   max-width:var(--track-width);
+  position:relative;
+  z-index:1;
 }
 
 .stage-column{
@@ -395,8 +400,9 @@ body{
   max-width:var(--dot-size);
   aspect-ratio:1 / 1;
   border-radius:50%;
-  border:2px solid rgba(0,0,0,.18);
-  background:#cfd6dc;
+  background:linear-gradient(180deg, #73797f 0%, #5e6368 100%);
+  border:1px solid rgba(255,255,255,.35);
+  box-shadow:0 6px 14px rgba(0,0,0,.18);
   position:relative;
   cursor:pointer;
   display:inline-flex;
@@ -404,6 +410,7 @@ body{
   justify-content:center;
   padding:0;
   flex:0 0 auto;
+  transform:translateY(2px);
 }
 
 .dot:focus{ outline:3px solid #000; outline-offset:3px; }
@@ -411,9 +418,9 @@ body{
 .dot::after{
   content:"";
   position:absolute;
-  inset:0;
+  inset:12% 14% 18%;
   border-radius:50%;
-  background:#fff;
+  background:rgba(255,255,255,.4);
   opacity:0;
   transition:opacity .12s ease;
 }
@@ -424,16 +431,17 @@ body{
 .orange-baseline{
   position:absolute;
   left:50%;
-  top:50%;
-  transform:translate(-50%, -50%);
-  height:10px;
+  bottom:0;
+  transform:translateX(-50%);
+  height:12px;
   margin:0;
-  border-radius:6px;
-  background:repeating-linear-gradient(90deg, var(--orange), var(--orange) 2px, transparent 2px, transparent 12px);
+  border-radius:999px;
+  background:repeating-linear-gradient(90deg, var(--orange), var(--orange) 3px, transparent 3px, transparent 11px);
   opacity:.96;
   pointer-events:none;
   width:100%;
   max-width:var(--track-width);
+  z-index:0;
 }
 
 /* Popup */
@@ -463,18 +471,19 @@ body{
 /* RIGHT rail — mirror main strip rows */
 .strip-rail{
   display:grid;
-  grid-template-rows:subgrid;
+  grid-template-rows:repeat(3, auto);
   grid-row:1 / span 3;
   justify-items:end;
-  align-items:center;
-  row-gap:0;
+  align-items:start;
+  row-gap:var(--row-gap);
+  align-content:start;
 }
 
 .rail-group{
   display:grid;
-  row-gap:10px;
+  row-gap:12px;
   text-align:right;
-  align-items:center;
+  align-items:start;
 }
 .cap{ max-width:100%; }  /* never overflow into gutter */
 .note{ margin-top:2px; } /* keep text clear of the baseline */
