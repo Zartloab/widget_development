@@ -297,8 +297,9 @@ body{
 .col-headings{
   grid-column:1 / -1;
   display:grid;
-  grid-template-columns:repeat(15, 1fr);  /* 15-track ruler */
-  gap:var(--dot-gap);                     /* same gap as .dotline */
+  grid-template-columns:repeat(15, minmax(0, 1fr)); /* lock to 15 equal tracks */
+  column-gap:var(--dot-gap);                          /* same rhythm as dots */
+  row-gap:0;
   color:#8d96a0;
   font-weight:800;
   text-align:center;
@@ -321,6 +322,9 @@ body{
   gap:8px;
   white-space:nowrap;
   grid-column:span 3;
+  transform:translateY(0);
+  transition:transform .2s ease;
+  will-change:transform;
 }
 
 .col-title .label{
@@ -328,6 +332,7 @@ body{
   font-size:1.05rem;
   font-weight:800;
   line-height:1.1;
+  transition:color .2s ease;
 }
 
 .col-title .label.grey{ color:#8d96a0; }
@@ -339,6 +344,7 @@ body{
   font-size:.9rem;
   letter-spacing:.08em;
   margin:0;
+  transition:color .2s ease, opacity .2s ease;
 }
 
 .title-arrows.grey{ color:#8d96a0; opacity:.6; }
@@ -349,6 +355,34 @@ body{
 .col-title[data-stage-title="2"]{ grid-column:7 / span 3; }
 .col-title[data-stage-title="3"]{ grid-column:10 / span 3; }
 .col-title[data-stage-title="4"]{ grid-column:13 / span 3; }
+
+[data-hover-col="0"] .col-title[data-stage-title="0"],
+[data-hover-col="1"] .col-title[data-stage-title="1"],
+[data-hover-col="2"] .col-title[data-stage-title="2"]{
+  transform:translateY(-6px);
+}
+
+[data-hover-col="3"] .col-title[data-stage-title="3"],
+[data-hover-col="4"] .col-title[data-stage-title="4"]{
+  transform:translateY(6px);
+}
+
+[data-hover-col="0"] .col-title[data-stage-title="0"] .label,
+[data-hover-col="1"] .col-title[data-stage-title="1"] .label,
+[data-hover-col="2"] .col-title[data-stage-title="2"] .label,
+[data-hover-col="3"] .col-title[data-stage-title="3"] .label,
+[data-hover-col="4"] .col-title[data-stage-title="4"] .label{
+  color:var(--ink);
+}
+
+[data-hover-col="0"] .col-title[data-stage-title="0"] .title-arrows,
+[data-hover-col="1"] .col-title[data-stage-title="1"] .title-arrows,
+[data-hover-col="2"] .col-title[data-stage-title="2"] .title-arrows,
+[data-hover-col="3"] .col-title[data-stage-title="3"] .title-arrows,
+[data-hover-col="4"] .col-title[data-stage-title="4"] .title-arrows{
+  color:var(--ink);
+  opacity:1;
+}
 
 .title-float{
   position:absolute;
