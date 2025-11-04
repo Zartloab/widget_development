@@ -226,10 +226,10 @@ body{
 /* STRIP */
 .imw-strip{ width:100%; }
 
+
 .strip-grid{
   display:grid;
-  /* main column EXCLUDES rail + gutter (prevents overlap), rail is fixed */
-  grid-template-columns:minmax(0, calc(100% - var(--rail-width) - var(--gutter))) var(--rail-width);
+  grid-template-columns:minmax(0, 1fr) var(--rail-width);
   grid-template-rows:repeat(3, auto);
   column-gap:var(--gutter);
   align-items:start;
@@ -240,7 +240,7 @@ body{
   display:grid;
   grid-template-rows:auto auto auto;      /* guides, dots+baseline, guides */
   row-gap:var(--row-gap);
-  padding-right:calc(var(--gutter) / 2);  /* proportional breathing room */
+  min-width:0;                            /* allow the track to respect grid constraints */
   grid-row:1 / span 3;
 }
 
