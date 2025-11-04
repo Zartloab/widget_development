@@ -35,7 +35,7 @@ body{
   /* layout constants (single source of truth) */
   --row-gap:72px;            /* vertical rhythm between the 3 rows */
   --rail-width:240px;        /* right rail column width */
-  --gutter:72px;             /* fixed horizontal gutter between main + rail */
+  --gutter:120px;            /* fixed horizontal gutter between main + rail */
 
   /* pill sizing */
   --pill-main-width:272px;
@@ -240,7 +240,7 @@ body{
   display:grid;
   grid-template-rows:auto auto auto;      /* guides, dots+baseline, guides */
   row-gap:var(--row-gap);
-  padding-right:24px;        /* small breathing room before the rail */
+  padding-right:calc(var(--gutter) / 2);  /* proportional breathing room */
   grid-row:1 / span 3;
 }
 
