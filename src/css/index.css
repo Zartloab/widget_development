@@ -578,7 +578,7 @@ body{
 
 .rail-group{
   display:grid;
-  row-gap:10px;
+  row-gap:12px;
   text-align:right;
   align-items:center;
   align-self:center;
