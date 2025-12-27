@@ -1,35 +1,53 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Interactive Model</title>
-  <link rel="stylesheet" href="src/css/index.css" />
+  <link rel="stylesheet" href="dist/css/style.css" />
 </head>
+
 <body>
   <!-- INTERACTIVE MODEL -->
-  <div class="imw-bg" style="--imw-bg: url('/widget_development/assets/Widget_BG.png');">
-    <div class="imw-panel">
-      <div class="imw" data-imw>
-        <h2 class="imw-title">INTERACTIVE MODEL</h2>
+  <div class="imw-panel">
+    <div class="imw" data-imw>
+      <h2 class="imw-title">INTERACTIVE MODEL</h2>
 
-        <div class="imw-layout" aria-describedby="imw-help">
-          <div class="imw-left">
-            <div class="left-group">
+      <div class="imw-layout" aria-describedby="imw-help">
+
+
+        <div class="imw-strip">
+          <div class="strip-grid">
+            <div class="left-group left-group-1">
               <div class="pill-row">
                 <button class="pill pill-blue" type="button" aria-describedby="tt-cs">
                   Cultural<br>Safety
                 </button>
-                <span class="pill-cap pill-cap-blue">Safe</span>
                 <div class="tooltip speech" id="tt-cs" role="tooltip">
                   The level of cultural safety, as defined by Indigenous people,
                   across all aspects of a commissioned evaluation from the design
                   through to final reporting.
                 </div>
+                <span class="pill-cap pill-cap-blue">Safe</span>
               </div>
             </div>
-
-            <div class="left-group">
+            <div class="left-group left-hint-1">
+              <div>
+                High Commissioner <br />
+                Cultural Capability
+              </div>
+            </div>
+            <div class="guide guide-top" id="guideTop" aria-hidden="true"></div>
+            <div class="rail-group rail-group-1">
+              <div class="pill-cap-right pill-cap-blue">Unsafe</div>
+            </div>
+            <div class="note rail-hint-1">
+              <div>
+                Limited <br />Commissioner <br />Cultural Capability
+              </div>
+            </div>
+            <div class="left-group left-group-2">
               <div class="pill-row">
                 <button class="pill pill-orange" type="button" aria-describedby="tt-pw">
                   Power<br>Balance/ Imbalance
@@ -42,8 +60,99 @@
                 </div>
               </div>
             </div>
+            <div class="left-group left-hint-2">
+              <div>
+                Self-determination
+              </div>
+            </div>
+            <div class="guide guide-mid" id="midRow">
+              <div class="col-headings top" aria-hidden="true">
+                <div class="col-title top left" data-stage-title="0">
+                  <span class="label grey">Indigenous-led</span>
+                  <span class="title-arrows grey" aria-hidden="true">↔</span>
+                </div>
+                <div class="col-title top center" data-stage-title="1">
+                  <span class="label strong">Delegative</span>
+                  <span class="title-arrows black" aria-hidden="true">↔</span>
+                </div>
+                <div class="col-title top right" data-stage-title="2">
+                  <span class="label grey">Co-design</span>
+                  <span class="title-arrows grey" aria-hidden="true">↔</span>
+                </div>
+              </div>
 
-            <div class="left-group">
+              <div class="dotline" role="group" aria-label="Select a theme at a stage">
+                <div class="stage-column" data-stage-col="0">
+                  <button class="dot" data-theme="cultural" data-stage="0"
+                    aria-label="Cultural Safety — Indigenous Led"></button>
+                  <button class="dot" data-theme="power" data-stage="0" aria-label="Power — Indigenous Led"></button>
+                  <button class="dot" data-theme="reciprocity" data-stage="0"
+                    aria-label="Reciprocity — Indigenous Led"></button>
+                </div>
+
+                <div class="stage-column" data-stage-col="1">
+                  <button class="dot" data-theme="cultural" data-stage="1"
+                    aria-label="Cultural Safety — Delegative"></button>
+                  <button class="dot" data-theme="power" data-stage="1" aria-label="Power — Delegative"></button>
+                  <button class="dot" data-theme="reciprocity" data-stage="1"
+                    aria-label="Reciprocity — Delegative"></button>
+                </div>
+
+                <div class="stage-column" data-stage-col="2">
+                  <button class="dot" data-theme="cultural" data-stage="2"
+                    aria-label="Cultural Safety — Co-Design"></button>
+                  <button class="dot" data-theme="power" data-stage="2" aria-label="Power — Co-Design"></button>
+                  <button class="dot" data-theme="reciprocity" data-stage="2"
+                    aria-label="Reciprocity — Co-Design"></button>
+                </div>
+
+                <div class="stage-column" data-stage-col="3">
+                  <button class="dot" data-theme="cultural" data-stage="3"
+                    aria-label="Cultural Safety — Participatory"></button>
+                  <button class="dot" data-theme="power" data-stage="3" aria-label="Power — Participatory"></button>
+                  <button class="dot" data-theme="reciprocity" data-stage="3"
+                    aria-label="Reciprocity — Participatory"></button>
+                </div>
+
+                <div class="stage-column" data-stage-col="4">
+                  <button class="dot" data-theme="cultural" data-stage="4"
+                    aria-label="Cultural Safety — Top Down"></button>
+                  <button class="dot" data-theme="power" data-stage="4" aria-label="Power — Top Down"></button>
+                  <button class="dot" data-theme="reciprocity" data-stage="4"
+                    aria-label="Reciprocity — Top Down"></button>
+                </div>
+              </div>
+
+              <div class="orange-baseline" id="baseline" aria-hidden="true"></div>
+
+              <div class="col-headings bottom" aria-hidden="true">
+                <div class="col-title bottom" data-stage-title="3">
+                  <span class="label grey">Participatory</span>
+                  <span class="title-arrows grey" aria-hidden="true">↔</span>
+                </div>
+                <div class="col-title bottom" data-stage-title="4">
+                  <span class="label grey">Top-down</span>
+                  <span class="title-arrows grey" aria-hidden="true">↔</span>
+                </div>
+              </div>
+
+              <div class="title-float" id="titleFloat" aria-hidden="true"></div>
+              <div class="popover" id="imw-popover" role="dialog" aria-live="polite" aria-labelledby="imw-popover-title"
+                aria-describedby="imw-popover-text" hidden>
+                <div class="popover-card">
+                  <h3 id="imw-popover-title"></h3>
+                  <p id="imw-popover-text"></p>
+                  <button class="close" type="button" data-close>Close</button>
+                </div>
+              </div>
+            </div>
+            <div class="rail-group rail-group-2">
+              <div class="pill-cap-right cap-orange">Commissioner Power</div>
+            </div>
+            <div class="note rail-hint-2">
+              Limited Participation
+            </div>
+            <div class="left-group left-group-3">
               <div class="pill-row">
                 <button class="pill pill-green" type="button" aria-describedby="tt-rc">
                   Reciprocity
@@ -56,115 +165,27 @@
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="imw-strip">
-            <div class="strip-grid">
-              <div class="strip-main">
-                <div class="rows" id="rows">
-                  <div class="guide guide-top" id="guideTop" aria-hidden="true"></div>
-
-                  <div class="mid" id="midRow">
-                    <div class="col-headings top" aria-hidden="true">
-                      <div class="col-title top left" data-stage-title="0">
-                        <span class="label grey">Indigenous-led</span>
-                        <span class="title-arrows grey" aria-hidden="true">↔</span>
-                      </div>
-                      <div class="col-title top center" data-stage-title="1">
-                        <span class="label strong">Delegative</span>
-                        <span class="title-arrows black" aria-hidden="true">↔</span>
-                      </div>
-                      <div class="col-title top right" data-stage-title="2">
-                        <span class="label grey">Co-design</span>
-                        <span class="title-arrows grey" aria-hidden="true">↔</span>
-                      </div>
-                    </div>
-
-                    <div class="dotline" role="group" aria-label="Select a theme at a stage">
-                      <div class="stage-column" data-stage-col="0">
-                        <button class="dot" data-theme="cultural"    data-stage="0" aria-label="Cultural Safety — Indigenous Led"></button>
-                        <button class="dot" data-theme="power"       data-stage="0" aria-label="Power — Indigenous Led"></button>
-                        <button class="dot" data-theme="reciprocity" data-stage="0" aria-label="Reciprocity — Indigenous Led"></button>
-                      </div>
-
-                      <div class="stage-column" data-stage-col="1">
-                        <button class="dot" data-theme="cultural"    data-stage="1" aria-label="Cultural Safety — Delegative"></button>
-                        <button class="dot" data-theme="power"       data-stage="1" aria-label="Power — Delegative"></button>
-                        <button class="dot" data-theme="reciprocity" data-stage="1" aria-label="Reciprocity — Delegative"></button>
-                      </div>
-
-                      <div class="stage-column" data-stage-col="2">
-                        <button class="dot" data-theme="cultural"    data-stage="2" aria-label="Cultural Safety — Co-Design"></button>
-                        <button class="dot" data-theme="power"       data-stage="2" aria-label="Power — Co-Design"></button>
-                        <button class="dot" data-theme="reciprocity" data-stage="2" aria-label="Reciprocity — Co-Design"></button>
-                      </div>
-
-                      <div class="stage-column" data-stage-col="3">
-                        <button class="dot" data-theme="cultural"    data-stage="3" aria-label="Cultural Safety — Participatory"></button>
-                        <button class="dot" data-theme="power"       data-stage="3" aria-label="Power — Participatory"></button>
-                        <button class="dot" data-theme="reciprocity" data-stage="3" aria-label="Reciprocity — Participatory"></button>
-                      </div>
-
-                      <div class="stage-column" data-stage-col="4">
-                        <button class="dot" data-theme="cultural"    data-stage="4" aria-label="Cultural Safety — Top Down"></button>
-                        <button class="dot" data-theme="power"       data-stage="4" aria-label="Power — Top Down"></button>
-                        <button class="dot" data-theme="reciprocity" data-stage="4" aria-label="Reciprocity — Top Down"></button>
-                      </div>
-                    </div>
-
-                    <div class="orange-baseline" id="baseline" aria-hidden="true"></div>
-
-                    <div class="col-headings bottom" aria-hidden="true">
-                      <div class="col-title bottom" data-stage-title="3">
-                        <span class="label grey">Participatory</span>
-                        <span class="title-arrows grey" aria-hidden="true">↔</span>
-                      </div>
-                      <div class="col-title bottom" data-stage-title="4">
-                        <span class="label grey">Top-down</span>
-                        <span class="title-arrows grey" aria-hidden="true">↔</span>
-                      </div>
-                    </div>
-
-                    <div class="title-float" id="titleFloat" aria-hidden="true"></div>
-
-                    <div class="popover" id="imw-popover" role="dialog"
-                      aria-live="polite" aria-labelledby="imw-popover-title" aria-describedby="imw-popover-text" hidden>
-                      <div class="popover-card">
-                        <h3 id="imw-popover-title"></h3>
-                        <p id="imw-popover-text"></p>
-                        <button class="close" type="button" data-close>Close</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="guide guide-bottom" id="guideBottom" aria-hidden="true"></div>
-                </div>
+            <div class="left-group left-hint-3">
+              <div>
+                Indigenous Benefit
               </div>
-
-              <div class="strip-rail" aria-hidden="true">
-                <div class="rail-group">
-                  <div class="cap cap-blue">Unsafe</div>
-                  <div class="note">Limited Commissioner Cultural Capability</div>
-                </div>
-                <div class="rail-group">
-                  <div class="cap cap-orange">Commissioner Power</div>
-                  <div class="note">Limited Participation</div>
-                </div>
-                <div class="rail-group">
-                  <div class="cap cap-green">Extractive</div>
-                  <div class="note">Benefit For Commissioner Only</div>
-                </div>
-              </div>
+            </div>
+            <div class="guide guide-bottom" id="guideBottom" aria-hidden="true"></div>
+            <div class="rail-group rail-group-3">
+              <div class="pill-cap-right cap-green">Extractive</div>
+            </div>
+            <div class="note rail-hint-3">
+              Benefit For Commissioner Only
             </div>
           </div>
         </div>
-
-        <p class="sr-only" id="imw-help">
-          Tab to a dot and press Enter or Space to open details. Press Escape to close.
-          Columns highlight on hover and focus.
-        </p>
-        <div class="sr-only" id="imw-live" aria-live="polite" aria-atomic="true"></div>
       </div>
+
+      <p class="sr-only" id="imw-help">
+        Tab to a dot and press Enter or Space to open details. Press Escape to close.
+        Columns highlight on hover and focus.
+      </p>
+      <div class="sr-only" id="imw-live" aria-live="polite" aria-atomic="true"></div>
     </div>
   </div>
 
@@ -180,6 +201,7 @@
     })();
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-  <script src="src/js/index.js" defer></script>
+  <script src="dist/js/index.js" defer></script>
 </body>
+
 </html>
