@@ -1031,14 +1031,68 @@ body {
 }
 
 .popover-card {
+  --pointer-depth: 12px;
+  overflow: visible;
+  border-radius: 22px;
   position: absolute;
   max-width: 540px;
   color: #fff;
-  border-radius: 22px;
   padding: 1rem 1.1rem;
   box-shadow: 0 18px 50px rgba(0, 0, 0, .25);
   border: 0;
   pointer-events: auto;
+}
+
+/* Sharp corner radius rules */
+.popover-card[data-pointer-direction="down"][data-pointer-side="left"] {
+  border-radius: 22px 22px 22px 0;
+}
+
+.popover-card[data-pointer-direction="down"][data-pointer-side="right"] {
+  border-radius: 22px 22px 0 22px;
+}
+
+.popover-card[data-pointer-direction="up"][data-pointer-side="left"] {
+  border-radius: 0 22px 22px 22px;
+}
+
+.popover-card[data-pointer-direction="up"][data-pointer-side="right"] {
+  border-radius: 22px 0 22px 22px;
+}
+
+.popover-card::after {
+  content: "";
+  position: absolute;
+  width: 24px; /* wedge width, consistent across themes */
+  height: var(--pointer-depth);
+  background: inherit;
+  pointer-events: none;
+}
+
+/* ABOVE dots (direction="down"): wedge attaches to BOTTOM corner, points DOWN */
+.popover-card[data-pointer-direction="down"][data-pointer-side="left"]::after {
+  left: 0;
+  bottom: calc(-1 * var(--pointer-depth));
+  clip-path: polygon(0 0, 100% 0, 0 100%); /* triangle pointing down from left corner */
+}
+
+.popover-card[data-pointer-direction="down"][data-pointer-side="right"]::after {
+  right: 0;
+  bottom: calc(-1 * var(--pointer-depth));
+  clip-path: polygon(0 0, 100% 0, 100% 100%); /* triangle pointing down from right corner */
+}
+
+/* BELOW dots (direction="up"): wedge attaches to TOP corner, points UP */
+.popover-card[data-pointer-direction="up"][data-pointer-side="left"]::after {
+  left: 0;
+  top: calc(-1 * var(--pointer-depth));
+  clip-path: polygon(0 0, 0 100%, 100% 100%); /* triangle pointing up from left corner */
+}
+
+.popover-card[data-pointer-direction="up"][data-pointer-side="right"]::after {
+  right: 0;
+  top: calc(-1 * var(--pointer-depth));
+  clip-path: polygon(100% 0, 0 100%, 100% 100%); /* triangle pointing up from right corner */
 }
 
 .popover-card h3 {

@@ -112,11 +112,30 @@
     popover.hidden = false;
     card.style.left = '0px';
     card.style.top = '0px';
-    var rCard0 = card.getBoundingClientRect();
-    var desiredLeft = rDot.left - rMid.left - rCard0.width / 2 + rDot.width / 2; // Center popover over dot
+    var rCard0 = card.getBoundingClientRect(); // CRITICAL: Compute dot center relative to popover container (not midRow)
 
-    var maxLeft = rMid.width - rCard0.width - 24;
-    var left = Math.max(24, Math.min(desiredLeft, maxLeft));
+    var rPop = popover.getBoundingClientRect();
+    var dotCenterXInPopover = rDot.left + rDot.width / 2 - rPop.left;
+    var cardWidth = rCard0.width; // Use popover container width for bounds (not midRow width)
+
+    var containerWidth = rPop.width;
+    var minLeft = 24;
+    var maxLeft = containerWidth - cardWidth - 24; // Decide which corner points based on dot position in popover container
+
+    var side = dotCenterXInPopover < containerWidth / 2 ? 'left' : 'right'; // Place the card so the chosen corner sits exactly on the dot X
+
+    var desiredLeft = side === 'left' ? dotCenterXInPopover : dotCenterXInPopover - cardWidth; // Flip BEFORE clamp if overflow
+
+    if (desiredLeft < minLeft || desiredLeft > maxLeft) {
+      side = side === 'left' ? 'right' : 'left';
+      desiredLeft = side === 'left' ? dotCenterXInPopover : dotCenterXInPopover - cardWidth;
+    }
+
+    var left = Math.max(minLeft, Math.min(desiredLeft, maxLeft)); // Set attributes
+
+    var direction = theme === 'reciprocity' ? 'up' : 'down';
+    card.setAttribute('data-pointer-side', side);
+    card.setAttribute('data-pointer-direction', direction);
     var margin = 12;
     var top;
 
@@ -173,8 +192,8 @@
 
     card.style.left = left + 'px';
     card.style.top = top + 'px';
-    var rCard = card.getBoundingClientRect();
-    placeFloatingTitle(stage, theme, rCard); // Highlight active dot
+    var rCardFinal = card.getBoundingClientRect();
+    placeFloatingTitle(stage, theme, rCardFinal); // Highlight active dot
 
     btn.classList.add('active'); // Add click-outside listener
 
