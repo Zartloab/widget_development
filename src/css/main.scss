@@ -61,13 +61,15 @@ body {
   /* right rail column width */
   --gutter: 120px;
   /* fixed horizontal gutter between main + rail */
+  /* mid-row spacing to keep titles clear of dashed guides */
+  --mid-headings-gap: 20px;
 
   /* pill sizing */
   --pill-radius: 70px;
   --pill-main-width: 272px;
   --pill-sub-width: 176px;
   --pill-gap: 18px;
-  --pill-height: 94px;
+  --pill-height: calc(var(--pill-cap-height) * 2);
   --pill-cap-height: 70px;
   /* dot sizing - IMPORTANT: Changing --dot-gap will automatically update all related elements */
   --dot-size: 24px;
@@ -137,7 +139,7 @@ body {
     --pill-main-width: 220px;
     --pill-sub-width: 144px;
     --pill-gap: 14px;
-    --pill-height: 88px;
+    --pill-height: calc(var(--pill-cap-height) * 2);
     --pill-cap-height: 66px;
     --gutter: 72px;
     --rail-width: 180px;
@@ -164,7 +166,7 @@ body {
     --pill-main-width: 232px;
     --pill-sub-width: 152px;
     --pill-gap: 16px;
-    --pill-height: 90px;
+    --pill-height: calc(var(--pill-cap-height) * 2);
     --pill-cap-height: 67px;
     --gutter: 96px;
     --rail-width: 200px;
@@ -196,7 +198,7 @@ body {
     --pill-main-width: 200px;
     --pill-sub-width: 130px;
     --pill-gap: 12px;
-    --pill-height: 84px;
+    --pill-height: calc(var(--pill-cap-height) * 2);
     --pill-cap-height: 63px;
     --gutter: 64px;
     --rail-width: 160px;
@@ -366,7 +368,7 @@ body {
   display: grid;
   /* one column wrapper */
   grid-template-columns: 1fr;
-  row-gap: 14px;
+  row-gap: var(--mid-headings-gap);
   /* smaller stack gap */
   justify-items: center;
   width: 100%;
@@ -503,7 +505,7 @@ body {
   justify-content: center;
   background: var(--accent);
   color: #fff;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 1.02rem;
   min-height: var(--pill-cap-height);
   padding: 0 28px;
@@ -525,7 +527,7 @@ body {
   justify-content: center;
   background: var(--accent);
   color: #fff;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 1.02rem;
   min-height: var(--pill-cap-height);
   padding: 0 28px;
@@ -766,6 +768,8 @@ body {
   font-family: "Inter", sans-serif;
   font-weight: 500;
   font-size: 0.875rem;
+  position: relative;
+  z-index: 2;
 }
 
 .col-headings> :empty {
@@ -773,11 +777,11 @@ body {
 }
 
 .col-headings.top {
-  margin-bottom: 6px;
+  margin-bottom: 0;
 }
 
 .col-headings.bottom {
-  margin-top: 6px;
+  margin-top: 0;
 }
 
 .col-title {
@@ -989,7 +993,7 @@ body {
   transition: box-shadow .2s ease, transform .2s ease;
 }
 
-.dot:focus {
+.dot:focus-visible {
   outline: 3px solid #000;
   outline-offset: 3px;
 }
@@ -999,9 +1003,17 @@ body {
   display: none;
 }
 
-.dot:hover,
-.dot:focus {
+.dot:hover {
   box-shadow: 0 16px 32px rgba(18, 28, 38, .24);
+}
+
+.dot.active {
+  border: 3px solid #000;
+  box-shadow: 0 16px 32px rgba(18, 28, 38, .24);
+}
+
+.dot.active:focus-visible {
+  outline: none; /* Remove outline when active, border is enough */
 }
 
 
@@ -1052,19 +1064,6 @@ body {
   background: var(--green);
 }
 
-.close {
-  margin-top: .75rem;
-  background: #111;
-  color: #fff;
-  padding: .45rem .8rem;
-  border-radius: 10px;
-  border: none;
-}
-
-.close:focus {
-  outline: 3px solid #000;
-  outline-offset: 3px;
-}
 
 /* RIGHT rail — mirror main strip rows */
 .strip-rail {
@@ -1094,7 +1093,7 @@ body {
 
 .cap {
   color: #fff;
-  font-weight: 700;
+  font-weight: 500;
   border-radius: 999px;
   padding: .55rem 1rem;
   font-size: 1.02rem;
@@ -1216,7 +1215,7 @@ body {
     --row-gap: 96px;
     --dot-gap: 16px;
     --dot-size: 24px;
-    --pill-height: 86px;
+    --pill-height: calc(var(--pill-cap-height) * 2);
     --pill-cap-height: 64px;
   }
 
@@ -1269,7 +1268,7 @@ body {
 @media (max-width:540px) {
   .imw {
     --row-gap: 94px;
-    --pill-height: 92px;
+    --pill-height: calc(var(--pill-cap-height) * 2);
     --pill-cap-height: 69px;
   }
 

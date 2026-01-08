@@ -40,7 +40,6 @@
   const card = popover.querySelector('.popover-card');
   const titleEl = document.getElementById('imw-popover-title');
   const textEl = document.getElementById('imw-popover-text');
-  const closeBtn = popover.querySelector('[data-close]');
 
   const titleMap = {};
   let lastTrigger = null;
@@ -110,9 +109,11 @@
   }
 
   function openPopover(btn) {
-    // NEW: restore any previously hidden default titles BEFORE opening a new popup
     clearFloatingTitle();
-
+    
+    // Remove active class from all dots first
+    root.querySelectorAll('.dot').forEach(dot => dot.classList.remove('active'));
+    
     lastTrigger = btn;
 
     const stage = Number(btn.getAttribute('data-stage'));
@@ -122,45 +123,84 @@
     textEl.textContent = COPY[theme][stage];
     card.dataset.theme = theme;
 
-    // measure anchors
     const rDot = btn.getBoundingClientRect();
     const rMid = midRow.getBoundingClientRect();
-    const rTop = guideTop.getBoundingClientRect();
-    const rBot = guideBot.getBoundingClientRect();
-    const rBase = baseline.getBoundingClientRect();
+    const rTop = guideTop.getBoundingClientRect(); // Blue guide-top
+    const rBot = guideBot.getBoundingClientRect(); // Green guide-bottom
+    const rBase = baseline.getBoundingClientRect(); // Orange baseline
+    const rDots = dotline.getBoundingClientRect(); // The entire dotline band
 
-    // show to get card size
     popover.hidden = false;
     card.style.left = '0px';
     card.style.top = '0px';
     const rCard0 = card.getBoundingClientRect();
 
-    // clamp X inside mid
-    const desiredLeft = rDot.left - rMid.left - 180;
+    const desiredLeft = rDot.left - rMid.left - (rCard0.width / 2) + (rDot.width / 2); // Center popover over dot
     const maxLeft = rMid.width - rCard0.width - 24;
     const left = Math.max(24, Math.min(desiredLeft, maxLeft));
 
-    // lane constraints
-    const laneUpMin = rTop.bottom - rMid.top + 12;
-    const laneUpMax = rBase.top - rMid.top - rCard0.height - 12;
-    const laneDnMin = rBase.bottom - rMid.top + 12;
-    const laneDnMax = rBot.top - rMid.top - rCard0.height - 12;
+    const margin = 12;
+    let top;
 
-    const preferredUp = rDot.top - rMid.top - rCard0.height - 12;
-    const preferredDn = rDot.bottom - rMid.top + 12;
+    if (theme === 'reciprocity') {
+      // Green dots: place BELOW the dotline in whitespace between orange baseline and green guide-bottom
+      const zoneTopBoundary = rBase.bottom - rMid.top + margin;
+      const zoneBottomBoundary = rBot.top - rMid.top - margin;
+      const availableHeight = zoneBottomBoundary - zoneTopBoundary;
 
-    const top = (theme === 'reciprocity')
-      ? Math.max(laneDnMin, Math.min(preferredDn, laneDnMax))
-      : Math.max(laneUpMin, Math.min(preferredUp, laneUpMax));
+      if (rCard0.height <= availableHeight) {
+        // If popover fits, place it at the top of the zone
+        top = zoneTopBoundary;
+      } else {
+        // If too tall, place it as high as possible without overlapping
+        top = zoneBottomBoundary - rCard0.height;
+      }
+
+      // Final safety: ensure popover bottom is above green guide-bottom
+      if (top + rCard0.height > zoneBottomBoundary) {
+        top = zoneBottomBoundary - rCard0.height;
+      }
+      // Ensure popover top is below orange baseline
+      if (top < zoneTopBoundary) {
+        top = zoneTopBoundary;
+      }
+
+    } else {
+      // Blue dots (cultural) and Orange dots (power): place ABOVE the dotline
+      // in whitespace between blue guide-top and dotline
+      const zoneTopBoundary = rTop.bottom - rMid.top + margin;
+      const zoneBottomBoundary = rDots.top - rMid.top - margin;
+      const availableHeight = zoneBottomBoundary - zoneTopBoundary;
+
+      if (rCard0.height <= availableHeight) {
+        // If popover fits, place it at the bottom of the zone (just above dotline)
+        top = zoneBottomBoundary - rCard0.height;
+      } else {
+        // If too tall, place it as low as possible without overlapping
+        top = zoneTopBoundary;
+      }
+
+      // Final safety: ensure popover top is below blue guide-top
+      if (top < zoneTopBoundary) {
+        top = zoneTopBoundary;
+      }
+      // Ensure popover bottom is above dotline
+      if (top + rCard0.height > zoneBottomBoundary) {
+        top = zoneBottomBoundary - rCard0.height;
+      }
+    }
 
     card.style.left = left + 'px';
     card.style.top = top + 'px';
 
-    // compute placed rect and then position the floating highlighted title
     const rCard = card.getBoundingClientRect();
     placeFloatingTitle(stage, theme, rCard);
 
-    closeBtn.focus();
+    // Highlight active dot
+    btn.classList.add('active');
+
+    // Add click-outside listener
+    document.addEventListener('click', onClickOutside);
     document.addEventListener('keydown', onEsc);
   }
 
@@ -168,13 +208,25 @@
     popover.hidden = true;
     clearFloatingTitle();
     document.removeEventListener('keydown', onEsc);
+    document.removeEventListener('click', onClickOutside); // Remove click-outside listener
     if (lastTrigger) {
-      lastTrigger.focus();
+      lastTrigger.classList.remove('active'); // Remove active class
+      lastTrigger.blur(); // Remove focus to prevent outline
       lastTrigger = null;
     }
   }
-  function onEsc(e) { if (e.key === 'Escape') closePopover(); }
-  closeBtn.addEventListener('click', closePopover);
+
+  function onClickOutside(e) {
+    if (!popover.contains(e.target) && !lastTrigger.contains(e.target)) {
+      closePopover();
+    }
+  }
+
+  function onEsc(e) {
+    if (e.key === 'Escape') closePopover();
+  }
+
+  // Removed closeBtn.addEventListener('click', closePopover);
 
   // click handlers
   root.querySelectorAll('.dot').forEach(btn => {
