@@ -14,8 +14,18 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; /* Prevent body scroll, let panel scroll if needed */
-  padding: clamp(1rem, 3vh, 2rem) clamp(1rem, 3vw, 2rem); /* Background border on all sides */
+  overflow: hidden;
+  padding: clamp(0.75rem, 2.5vh, 1.5rem) clamp(0.75rem, 2.5vw, 1.5rem);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+.imw-panel::-webkit-scrollbar {
+  display: none;
 }
 
 .imw,
@@ -80,22 +90,24 @@ body {
 
 .imw-panel {
   width: clamp(320px, 90vw, 1800px);
-  max-width: calc(100vw - clamp(2rem, 6vw, 4rem)); /* More background visible */
-  max-height: calc(100vh - clamp(2rem, 6vh, 4rem)); /* Fit within viewport height */
+  max-width: calc(100vw - clamp(1.5rem, 5vw, 3rem));
+  max-height: calc(100vh - clamp(1.5rem, 5vh, 3rem));
   background: var(--panel);
-  border-top-right-radius: 70px;
+  border-top-right-radius: clamp(28px, 4vw, 70px);
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
-  padding: clamp(20px, 2vw, 40px) clamp(16px, 1.5vw, 32px) clamp(32px, 3vw, 48px);
+  padding: clamp(12px, 1.5vw, 40px) clamp(12px, 1.2vw, 32px) clamp(16px, 2vw, 48px);
   margin: 0 auto;
   background-color: #ffffff;
-  min-height: auto; /* Content-based height */
-  height: fit-content; /* Size to content */
-  overflow-y: auto; /* Allow scroll if needed on very small screens */
+  min-height: auto;
+  height: fit-content;
+  overflow: hidden;
   position: relative;
   z-index: 1;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
 
 /* Responsive scaling - clamp() handles most scaling automatically */
@@ -103,50 +115,44 @@ body {
 /* Laptop screens - scale down to fit in viewport */
 @media (max-width: 1600px) {
   .imw {
-    --row-gap: clamp(36px, 3.5vh, 56px);
-    --pill-main-width: clamp(160px, 12vw, 220px);
-    --pill-sub-width: clamp(100px, 8vw, 150px);
-    --pill-cap-height: clamp(45px, 5vh, 60px);
-    --pill-gap: clamp(10px, 0.8vw, 14px);
-    --gutter: clamp(30px, 4vw, 80px);
-    --rail-width: clamp(120px, 10vw, 180px);
-    --dot-size: clamp(14px, 1.2vw, 20px);
-    --dot-gap: clamp(10px, 0.9vw, 16px);
-  }
-  .imw-panel {
-    padding: clamp(16px, 1.5vw, 32px) clamp(14px, 1.2vw, 28px) clamp(24px, 2vw, 40px);
+    --row-gap: clamp(28px, 3vh, 50px);
+    --pill-main-width: clamp(150px, 11vw, 200px);
+    --pill-sub-width: clamp(90px, 7vw, 140px);
+    --pill-cap-height: clamp(38px, 4.5vh, 55px);
+    --pill-gap: clamp(8px, 0.7vw, 14px);
+    --gutter: clamp(20px, 3vw, 70px);
+    --rail-width: clamp(110px, 9vw, 170px);
+    --dot-size: clamp(12px, 1vw, 18px);
+    --dot-gap: clamp(8px, 0.7vw, 14px);
   }
   .imw-title {
-    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-    margin: 0.75rem 0 1rem;
-  }
-  .pill {
-    font-size: clamp(1rem, 1.2vw, 1.25rem);
-  }
-  .pill-cap {
-    font-size: clamp(0.85rem, 1vw, 1rem);
+    font-size: clamp(1.4rem, 2vw, 2rem);
+    margin: 0.5rem 0 0.75rem;
   }
   .note {
-    font-size: clamp(0.75rem, 0.9vw, 0.875rem);
+    font-size: clamp(0.65rem, 0.8vw, 0.85rem);
+  }
+  .col-title .label {
+    font-size: clamp(0.65rem, 0.8vw, 0.85rem);
   }
 }
 /* Smaller laptops */
 @media (max-width: 1400px) {
   .imw {
-    --row-gap: clamp(32px, 3vh, 48px);
-    --pill-main-width: clamp(140px, 11vw, 200px);
-    --pill-sub-width: clamp(90px, 7vw, 130px);
-    --pill-cap-height: clamp(40px, 4.5vh, 55px);
-    --gutter: clamp(24px, 3vw, 60px);
-    --rail-width: clamp(100px, 9vw, 160px);
-    --dot-size: clamp(12px, 1.1vw, 18px);
-    --dot-gap: clamp(8px, 0.8vw, 14px);
+    --row-gap: clamp(24px, 2.5vh, 40px);
+    --pill-main-width: clamp(130px, 10vw, 180px);
+    --pill-sub-width: clamp(80px, 6.5vw, 120px);
+    --pill-cap-height: clamp(34px, 4vh, 48px);
+    --gutter: clamp(16px, 2.5vw, 50px);
+    --rail-width: clamp(90px, 8vw, 150px);
+    --dot-size: clamp(10px, 0.9vw, 16px);
+    --dot-gap: clamp(6px, 0.6vw, 12px);
   }
   .imw-title {
-    font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+    font-size: clamp(1.2rem, 1.8vw, 1.7rem);
   }
   .col-title .label {
-    font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+    font-size: clamp(0.6rem, 0.75vw, 0.8rem);
   }
 }
 @media (max-width: 960px) {
@@ -168,8 +174,8 @@ body {
   font-family: "Fira Sans", sans-serif;
   font-weight: 900;
   letter-spacing: 0.005em;
-  margin: 1rem 0 1.5rem;
-  font-size: 2.4rem;
+  margin: clamp(0.5rem, 1vh, 1rem) 0 clamp(0.75rem, 1.5vh, 1.5rem);
+  font-size: clamp(1.4rem, 2.2vw, 2.4rem);
 }
 
 /* PAGE GRID */
@@ -370,17 +376,19 @@ body {
   color: #fff;
   font-family: "Fira Sans", sans-serif;
   font-weight: 900;
-  font-size: 1.8rem;
-  line-height: 1.2;
+  font-size: clamp(0.9rem, 1.4vw, 1.8rem);
+  line-height: 1.15;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 36px;
+  padding: 0 clamp(12px, 2vw, 36px);
   min-height: var(--pill-height);
   border-radius: 0 var(--pill-radius) 0 0;
   cursor: default;
   white-space: normal;
+  word-break: normal;
+  overflow-wrap: break-word;
   inline-size: var(--pill-main-width);
   max-width: var(--pill-main-width);
   flex: 0 0 var(--pill-main-width);
@@ -415,16 +423,17 @@ body {
   background: var(--accent);
   color: #fff;
   font-weight: 500;
-  font-size: 1.02rem;
+  font-size: clamp(0.7rem, 0.9vw, 1.02rem);
   min-height: var(--pill-cap-height);
-  padding: 0 28px;
+  padding: 0 clamp(10px, 1.5vw, 28px);
   border-radius: 0 var(--pill-radius) 0 0;
   letter-spacing: 0.01em;
   inline-size: var(--pill-sub-width);
   max-width: var(--pill-sub-width);
   flex: 0 0 var(--pill-sub-width);
   white-space: normal;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: break-word;
   text-align: center;
   box-shadow: 0 12px 26px rgba(13, 36, 56, 0.14);
 }
@@ -706,7 +715,7 @@ body {
 .col-title .label {
   display: block;
   font-family: "Inter", sans-serif;
-  font-size: 0.875rem;
+  font-size: clamp(0.65rem, 0.9vw, 0.875rem);
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: 0.005em;
@@ -1039,7 +1048,7 @@ body {
   font-weight: 500;
   border-radius: 999px;
   padding: 0.55rem 1rem;
-  font-size: 1.02rem;
+  font-size: clamp(0.75rem, 0.9vw, 1.02rem);
   box-shadow: 0 10px 24px rgba(13, 36, 56, 0.14);
   display: inline-flex;
   align-items: center;
@@ -1061,8 +1070,8 @@ body {
 .note {
   color: #9ba6b2;
   font-family: "Inter", sans-serif;
-  font-size: 0.875rem;
-  max-width: 220px;
+  font-size: clamp(0.65rem, 0.85vw, 0.875rem);
+  max-width: clamp(140px, 12vw, 220px);
   line-height: 1.35;
   font-weight: 500;
 }
