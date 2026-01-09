@@ -13,19 +13,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: auto;
   padding: clamp(0.75rem, 2.5vh, 1.5rem) clamp(0.75rem, 2.5vw, 1.5rem);
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: thin; /* Firefox - thin scrollbar when needed */
 }
 
-body::-webkit-scrollbar {
-  display: none; /* Chrome/Safari/Opera */
-}
-
-.imw-panel::-webkit-scrollbar {
-  display: none;
-}
+/* Scrollbars appear only when content overflows (e.g., when zoomed in) */
 
 .imw,
 .imw * {
@@ -69,7 +62,7 @@ body::-webkit-scrollbar {
   /* vertical rhythm between the 3 rows */
   --rail-width: clamp(140px, 12vw, 240px);
   /* right rail column width */
-  --gutter: clamp(40px, 6vw, 120px);
+  --gutter: clamp(20px, 3vw, 60px);
   /* fixed horizontal gutter between main + rail */
   /* mid-row spacing to keep titles clear of dashed guides */
   --mid-headings-gap: clamp(12px, 1vw, 20px);
@@ -77,7 +70,7 @@ body::-webkit-scrollbar {
   /* pill sizing - dynamic based on viewport */
   --pill-radius: clamp(50px, 4vw, 70px);
   --pill-main-width: clamp(180px, 14vw, 272px);
-  --pill-sub-width: clamp(120px, 9vw, 176px);
+  --pill-sub-width: clamp(175px, 14vw, 210px);
   --pill-gap: clamp(12px, 1vw, 18px);
   --pill-cap-height: clamp(50px, 4vw, 70px);
   --pill-height: calc(var(--pill-cap-height) * 2);
@@ -108,10 +101,9 @@ body::-webkit-scrollbar {
   background-color: #ffffff;
   min-height: auto;
   height: fit-content;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   z-index: 1;
-  scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/Edge */
 }
 
@@ -123,10 +115,10 @@ body::-webkit-scrollbar {
   .imw {
     --row-gap: clamp(28px, 3vh, 50px);
     --pill-main-width: clamp(150px, 11vw, 200px);
-    --pill-sub-width: clamp(90px, 7vw, 140px);
+    --pill-sub-width: clamp(155px, 12vw, 190px);
     --pill-cap-height: clamp(38px, 4.5vh, 55px);
     --pill-gap: clamp(8px, 0.7vw, 14px);
-    --gutter: clamp(20px, 3vw, 70px);
+    --gutter: clamp(12px, 2vw, 40px);
     --rail-width: clamp(110px, 9vw, 170px);
     --dot-size: clamp(12px, 1vw, 18px);
     --dot-gap: clamp(8px, 0.7vw, 14px);
@@ -151,9 +143,9 @@ body::-webkit-scrollbar {
   .imw {
     --row-gap: clamp(24px, 2.5vh, 40px);
     --pill-main-width: clamp(130px, 10vw, 180px);
-    --pill-sub-width: clamp(80px, 6.5vw, 120px);
+    --pill-sub-width: clamp(145px, 11vw, 175px);
     --pill-cap-height: clamp(34px, 4vh, 48px);
-    --gutter: clamp(16px, 2.5vw, 50px);
+    --gutter: clamp(8px, 1.5vw, 30px);
     --rail-width: clamp(90px, 8vw, 150px);
     --dot-size: clamp(10px, 0.9vw, 16px);
     --dot-gap: clamp(6px, 0.6vw, 12px);
@@ -259,13 +251,14 @@ body::-webkit-scrollbar {
   grid-area: left2;
   align-content: flex-start;
   justify-self: flex-end;
-  padding: 10px;
+  padding: 4px 0;
   font-family: "Inter", sans-serif;
-  color: #9ba6b2;
-  font-size: 0.875rem;
-  max-width: 220px;
+  color: #6b7580;
+  font-size: clamp(0.7rem, 0.85vw, 0.875rem);
+  width: var(--pill-sub-width);
   line-height: 1.35;
   font-weight: 500;
+  text-align: center;
 }
 
 .guide-top {
@@ -298,13 +291,14 @@ body::-webkit-scrollbar {
   grid-area: left4;
   align-content: flex-start;
   justify-self: flex-end;
-  padding: 10px;
+  padding: 4px 0;
   font-family: "Inter", sans-serif;
-  color: #9ba6b2;
-  font-size: 0.875rem;
-  max-width: 220px;
+  color: #6b7580;
+  font-size: clamp(0.7rem, 0.85vw, 0.875rem);
+  width: var(--pill-sub-width);
   line-height: 1.35;
   font-weight: 500;
+  text-align: center;
 }
 
 
@@ -355,13 +349,14 @@ body::-webkit-scrollbar {
   grid-area: left6;
   align-content: flex-start;
   justify-self: flex-end;
-  padding: 10px;
+  padding: 4px 0;
   font-family: "Inter", sans-serif;
-  color: #9ba6b2;
-  font-size: 0.875rem;
-  max-width: 220px;
+  color: #6b7580;
+  font-size: clamp(0.7rem, 0.85vw, 0.875rem);
+  width: var(--pill-sub-width);
   line-height: 1.35;
   font-weight: 500;
+  text-align: center;
 }
 
 .guide-bottom {
@@ -455,18 +450,17 @@ body::-webkit-scrollbar {
   background: var(--accent);
   color: #fff;
   font-weight: 500;
-  font-size: clamp(0.7rem, 0.9vw, 1.02rem);
+  font-size: clamp(0.65rem, 0.9vw, 1.02rem);
   min-height: var(--pill-cap-height);
-  padding: 0 clamp(10px, 1.5vw, 28px);
+  padding: clamp(8px, 1vh, 14px) clamp(12px, 1.5vw, 24px);
   border-radius: 0 var(--pill-radius) 0 0;
   letter-spacing: .01em;
   inline-size: var(--pill-sub-width);
-  max-width: var(--pill-sub-width);
+  min-width: var(--pill-sub-width);
   flex: 0 0 var(--pill-sub-width);
   white-space: normal;
-  word-break: normal;
-  overflow-wrap: break-word;
   text-align: center;
+  line-height: 1.2;
   box-shadow: 0 12px 26px rgba(13, 36, 56, .14);
 }
 
@@ -1269,8 +1263,12 @@ body::-webkit-scrollbar {
     inline-size: 100%;
     max-width: 100%;
     flex: 1 1 auto;
-    min-height: auto;
+    height: auto;
+    max-height: none;
     padding: 16px 24px;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
     box-shadow: 0 12px 26px rgba(13, 36, 56, .14);
   }
 
