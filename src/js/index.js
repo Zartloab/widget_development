@@ -110,10 +110,7 @@
 
   function openPopover(btn) {
     clearFloatingTitle();
-    
-    // Remove active class from all dots first
     root.querySelectorAll('.dot').forEach(dot => dot.classList.remove('active'));
-    
     lastTrigger = btn;
 
     const stage = Number(btn.getAttribute('data-stage'));
@@ -123,105 +120,91 @@
     textEl.textContent = COPY[theme][stage];
     card.dataset.theme = theme;
 
-    const rDot = btn.getBoundingClientRect();
-    const rMid = midRow.getBoundingClientRect();
-    const rTop = guideTop.getBoundingClientRect(); // Blue guide-top
-    const rBot = guideBot.getBoundingClientRect(); // Green guide-bottom
-    const rBase = baseline.getBoundingClientRect(); // Orange baseline
-    const rDots = dotline.getBoundingClientRect(); // The entire dotline band
-
+    // A) Show popover + reset card
     popover.hidden = false;
     card.style.left = '0px';
     card.style.top = '0px';
-    const rCard0 = card.getBoundingClientRect();
 
-    // CRITICAL: Compute dot center relative to popover container (not midRow)
-    const rPop = popover.getBoundingClientRect();
-    const dotCenterXInPopover = (rDot.left + rDot.width / 2) - rPop.left;
-    const cardWidth = rCard0.width;
+    // B) Get dot center in VIEWPORT coordinates (absolute truth)
+    const rDot = btn.getBoundingClientRect();
+    const dotCenterX = rDot.left + rDot.width / 2;
 
-    // Use popover container width for bounds (not midRow width)
-    const containerWidth = rPop.width;
-    const minLeft = 24;
-    const maxLeft = containerWidth - cardWidth - 24;
+    // C) Get reference rects
+    const rDots = dotline.getBoundingClientRect();
+    const rCard = card.getBoundingClientRect();
+    const cardWidth = rCard.width;
+    const cardHeight = rCard.height;
 
-    // Decide which corner points based on dot position in popover container
-    let side = (dotCenterXInPopover < containerWidth / 2) ? 'left' : 'right';
+    // D) Decide side based on dot position within dotline
+    const dotRelativeX = dotCenterX - rDots.left;
+    const dotlineWidth = rDots.width;
+    const side = (dotRelativeX <= dotlineWidth / 2) ? 'left' : 'right';
 
-    // Place the card so the chosen corner sits exactly on the dot X
-    let desiredLeft = (side === 'left')
-      ? dotCenterXInPopover
-      : dotCenterXInPopover - cardWidth;
-
-    // Flip BEFORE clamp if overflow
-    if (desiredLeft < minLeft || desiredLeft > maxLeft) {
-      side = (side === 'left') ? 'right' : 'left';
-      desiredLeft = (side === 'left') ? dotCenterXInPopover : dotCenterXInPopover - cardWidth;
-    }
-
-    const left = Math.max(minLeft, Math.min(desiredLeft, maxLeft));
-
-    // Set attributes
-    const direction = theme === 'reciprocity' ? 'up' : 'down';
+    // E) Set direction based on theme
+    const direction = (theme === 'reciprocity') ? 'up' : 'down';
     card.setAttribute('data-pointer-side', side);
     card.setAttribute('data-pointer-direction', direction);
 
-    const margin = 12;
-    let top;
+    // F) Calculate target VIEWPORT positions for the sharp corner
+    const targetCornerX = dotCenterX;  // Corner must be at dot center X
+    let targetCornerY;
 
     if (theme === 'reciprocity') {
-      // Green dots: place BELOW the dotline in whitespace between orange baseline and green guide-bottom
-      const zoneTopBoundary = rBase.bottom - rMid.top + margin;
-      const zoneBottomBoundary = rBot.top - rMid.top - margin;
-      const availableHeight = zoneBottomBoundary - zoneTopBoundary;
-
-      if (rCard0.height <= availableHeight) {
-        // If popover fits, place it at the top of the zone
-        top = zoneTopBoundary;
-      } else {
-        // If too tall, place it as high as possible without overlapping
-        top = zoneBottomBoundary - rCard0.height;
-      }
-
-      // Final safety: ensure popover bottom is above green guide-bottom
-      if (top + rCard0.height > zoneBottomBoundary) {
-        top = zoneBottomBoundary - rCard0.height;
-      }
-      // Ensure popover top is below orange baseline
-      if (top < zoneTopBoundary) {
-        top = zoneTopBoundary;
-      }
-
+      // Green: popup BELOW dots, sharp corner on TOP
+      // Place corner just below the dotline (small gap)
+      targetCornerY = rDots.bottom + 8;  // 8px gap from dotline bottom
     } else {
-      // Blue dots (cultural) and Orange dots (power): place ABOVE the dotline
-      // in whitespace between blue guide-top and dotline
-      const zoneTopBoundary = rTop.bottom - rMid.top + margin;
-      const zoneBottomBoundary = rDots.top - rMid.top - margin;
-      const availableHeight = zoneBottomBoundary - zoneTopBoundary;
-
-      if (rCard0.height <= availableHeight) {
-        // If popover fits, place it at the bottom of the zone (just above dotline)
-        top = zoneBottomBoundary - rCard0.height;
-      } else {
-        // If too tall, place it as low as possible without overlapping
-        top = zoneTopBoundary;
-      }
-
-      // Final safety: ensure popover top is below blue guide-top
-      if (top < zoneTopBoundary) {
-        top = zoneTopBoundary;
-      }
-      // Ensure popover bottom is above dotline
-      if (top + rCard0.height > zoneBottomBoundary) {
-        top = zoneBottomBoundary - rCard0.height;
-      }
+      // Blue/Orange: popup ABOVE dots, sharp corner on BOTTOM
+      // Place corner just above the dotline (small gap)
+      targetCornerY = rDots.top - 8;  // 8px gap from dotline top
     }
 
+    // G) Calculate card top-left position based on which corner is sharp
+    let cardLeft, cardTop;
+
+    if (side === 'left') {
+      // Sharp corner is on LEFT edge
+      cardLeft = targetCornerX;
+    } else {
+      // Sharp corner is on RIGHT edge
+      cardLeft = targetCornerX - cardWidth;
+    }
+
+    if (direction === 'up') {
+      // Sharp corner is on TOP edge (green popups)
+      cardTop = targetCornerY;
+    } else {
+      // Sharp corner is on BOTTOM edge (blue/orange popups)
+      cardTop = targetCornerY - cardHeight;
+    }
+
+    // H) Convert viewport coordinates to offsetParent coordinates
+    const op = card.offsetParent;
+    const rOP = op.getBoundingClientRect();
+    const left = cardLeft - rOP.left;
+    const top = cardTop - rOP.top;
+
+    // I) Apply position
     card.style.left = left + 'px';
     card.style.top = top + 'px';
 
+    // J) VERIFY and CORRECT using viewport coordinates
     const rCardFinal = card.getBoundingClientRect();
-    placeFloatingTitle(stage, theme, rCardFinal);
+    const actualCornerX = (side === 'left') ? rCardFinal.left : rCardFinal.right;
+    const actualCornerY = (direction === 'up') ? rCardFinal.top : rCardFinal.bottom;
+
+    const errorX = dotCenterX - actualCornerX;
+    const errorY = targetCornerY - actualCornerY;
+
+    // Apply corrections if needed
+    if (Math.abs(errorX) > 0.5 || Math.abs(errorY) > 0.5) {
+      card.style.left = (left + errorX) + 'px';
+      card.style.top = (top + errorY) + 'px';
+    }
+
+    // K) Place floating title
+    const rCardForTitle = card.getBoundingClientRect();
+    placeFloatingTitle(stage, theme, rCardForTitle);
 
     // Highlight active dot
     btn.classList.add('active');
