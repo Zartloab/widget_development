@@ -57,9 +57,9 @@
     var defaultTitle = titleMap[stage];
     if (!defaultTitle) return; // hide the default title while floating
 
-    defaultTitle.style.visibility = 'hidden'; // set content + theme-highlighting
+    defaultTitle.style.visibility = 'hidden'; // set content + theme-highlighting (arrows drawn via CSS)
 
-    floatEl.innerHTML = "<span>".concat(STAGES[stage], "</span><span class=\"title-arrows\">\u2194</span>");
+    floatEl.innerHTML = "<span>".concat(STAGES[stage], "</span><span class=\"title-arrows\"></span>");
     floatEl.dataset.theme = theme;
     floatEl.classList.add('active'); // measure and place
 
@@ -94,7 +94,9 @@
     });
     lastTrigger = btn;
     var stage = Number(btn.getAttribute('data-stage'));
-    var theme = btn.getAttribute('data-theme');
+    var theme = btn.getAttribute('data-theme'); // Set active column for highlighting all 3 dots in this column
+
+    root.setAttribute('data-active-col', String(stage));
     titleEl.textContent = STAGES[stage];
     textEl.textContent = COPY[theme][stage];
     card.dataset.theme = theme; // A) Show popover + reset card
@@ -185,6 +187,8 @@
   function closePopover() {
     popover.hidden = true;
     clearFloatingTitle();
+    root.removeAttribute('data-active-col'); // Remove active column highlighting
+
     document.removeEventListener('keydown', onEsc);
     document.removeEventListener('click', onClickOutside); // Remove click-outside listener
 

@@ -75,8 +75,8 @@
     // hide the default title while floating
     defaultTitle.style.visibility = 'hidden';
 
-    // set content + theme-highlighting
-    floatEl.innerHTML = `<span>${STAGES[stage]}</span><span class="title-arrows">↔</span>`;
+    // set content + theme-highlighting (arrows drawn via CSS)
+    floatEl.innerHTML = `<span>${STAGES[stage]}</span><span class="title-arrows"></span>`;
     floatEl.dataset.theme = theme;
     floatEl.classList.add('active');
 
@@ -115,6 +115,9 @@
 
     const stage = Number(btn.getAttribute('data-stage'));
     const theme = btn.getAttribute('data-theme');
+
+    // Set active column for highlighting all 3 dots in this column
+    root.setAttribute('data-active-col', String(stage));
 
     titleEl.textContent = STAGES[stage];
     textEl.textContent = COPY[theme][stage];
@@ -217,6 +220,7 @@
   function closePopover() {
     popover.hidden = true;
     clearFloatingTitle();
+    root.removeAttribute('data-active-col'); // Remove active column highlighting
     document.removeEventListener('keydown', onEsc);
     document.removeEventListener('click', onClickOutside); // Remove click-outside listener
     if (lastTrigger) {
