@@ -237,6 +237,11 @@
   }
 
   function onKeyHandler(e) {
+    // Only handle keys when popover is open
+    if (popover.hidden) {
+      return;
+    }
+    
     // Close on Escape
     if (e.key === 'Escape') {
       closePopover();
@@ -250,9 +255,8 @@
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
       
-      // If no focusable elements in card, keep focus on lastTrigger
+      // If no focusable elements in card, allow normal tab navigation
       if (focusableEls.length === 0) {
-        e.preventDefault();
         return;
       }
       
@@ -277,9 +281,15 @@
 
   // Removed closeBtn.addEventListener('click', closePopover);
 
-  // click handlers
+  // click and keyboard handlers for dots
   root.querySelectorAll('.dot').forEach(btn => {
     btn.type = 'button';
     btn.addEventListener('click', () => openPopover(btn));
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openPopover(btn);
+      }
+    });
   });
 })();
