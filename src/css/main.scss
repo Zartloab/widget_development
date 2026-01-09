@@ -42,6 +42,30 @@ body {
   border: 0;
 }
 
+/* Skip link - visible only on focus */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e3c60;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 10000;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 16px;
+  outline: 3px solid #000;
+  outline-offset: 2px;
+}
+
 .imw {
   /* theme */
   --blue: #1e3c60;
@@ -976,6 +1000,19 @@ body {
   transition: box-shadow .2s ease, transform .2s ease;
 }
 
+/* Increase touch target to 44px minimum for accessibility (WCAG 2.1 AA) */
+.dot::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
 .dot:focus-visible {
   outline: 3px solid #000;
   outline-offset: 3px;
@@ -1283,5 +1320,21 @@ body {
 
   .tooltip.speech {
     margin-top: .5rem;
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .skip-link {
+    transition: none;
   }
 }

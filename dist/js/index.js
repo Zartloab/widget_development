@@ -178,10 +178,10 @@
     var rCardForTitle = card.getBoundingClientRect();
     placeFloatingTitle(stage, theme, rCardForTitle); // Highlight active dot
 
-    btn.classList.add('active'); // Add click-outside listener
+    btn.classList.add('active'); // Add click-outside listener and keyboard handler
 
     document.addEventListener('click', onClickOutside);
-    document.addEventListener('keydown', onEsc);
+    document.addEventListener('keydown', onKeyHandler);
   }
 
   function closePopover() {
@@ -189,13 +189,13 @@
     clearFloatingTitle();
     root.removeAttribute('data-active-col'); // Remove active column highlighting
 
-    document.removeEventListener('keydown', onEsc);
+    document.removeEventListener('keydown', onKeyHandler);
     document.removeEventListener('click', onClickOutside); // Remove click-outside listener
 
     if (lastTrigger) {
       lastTrigger.classList.remove('active'); // Remove active class
 
-      lastTrigger.blur(); // Remove focus to prevent outline
+      lastTrigger.focus(); // Return focus to the trigger button (accessibility)
 
       lastTrigger = null;
     }
@@ -207,8 +207,40 @@
     }
   }
 
-  function onEsc(e) {
-    if (e.key === 'Escape') closePopover();
+  function onKeyHandler(e) {
+    // Close on Escape
+    if (e.key === 'Escape') {
+      closePopover();
+      return;
+    } // Focus trap on Tab - keep focus within popover
+
+
+    if (e.key === 'Tab') {
+      // Get all focusable elements in popover
+      var focusableEls = card.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'); // If no focusable elements in card, keep focus on lastTrigger
+
+      if (focusableEls.length === 0) {
+        e.preventDefault();
+        return;
+      }
+
+      var firstEl = focusableEls[0];
+      var lastEl = focusableEls[focusableEls.length - 1];
+
+      if (e.shiftKey) {
+        // Shift+Tab: if on first element, go to last
+        if (document.activeElement === firstEl || !card.contains(document.activeElement)) {
+          e.preventDefault();
+          lastEl.focus();
+        }
+      } else {
+        // Tab: if on last element, go to first
+        if (document.activeElement === lastEl || !card.contains(document.activeElement)) {
+          e.preventDefault();
+          firstEl.focus();
+        }
+      }
+    }
   } // Removed closeBtn.addEventListener('click', closePopover);
   // click handlers
 
